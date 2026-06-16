@@ -199,7 +199,7 @@ const HeroPage = () => {
   return (
     <section
       ref={heroRef}
-      className="font-arimo min-h-screen bg-[var(--color-primary-bg)] pt-24"
+      className="font-arimo min-h-screen overflow-hidden bg-[var(--color-primary-bg)] pt-24"
     >
       <div className="container mx-auto grid min-h-[calc(100vh-96px)] items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
         <div className="relative h-[420px] w-full sm:h-[520px] lg:h-[620px]">
