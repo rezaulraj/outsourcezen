@@ -46,7 +46,7 @@ const PathAnimation = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[var(--color-primary-bg)] py-6"
+      className="relative overflow-hidden bg-[var(--color-primary-bg)] py-2"
     >
       <svg
         className="h-[220px] w-full"

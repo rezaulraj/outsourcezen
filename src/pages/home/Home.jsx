@@ -6,6 +6,10 @@ import Cliend from "./Cliend";
 import Solutions from "./Solutions";
 import PathAnimation from "./PathAnimation";
 import TeamBuilding from "./TeamBuilding";
+import WhyUs from "./WhyUs";
+import SurgeProtect from "./SurgeProtect";
+import CustomerReviews from "./CustomerReviews";
+import ResourcesSection from "./ResourcesSection";
 
 const Home = () => {
   return (
@@ -18,6 +22,10 @@ const Home = () => {
       <PathAnimation />
       <TeamBuilding />
       <PartnerMarque />
+      <WhyUs />
+      <SurgeProtect />
+      <CustomerReviews />
+      <ResourcesSection />
     </div>
   );
 };
