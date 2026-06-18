@@ -107,57 +107,28 @@ const Home = () => {
   }, []);
 
   return (
-    <main
-      ref={pageRef}
-      className="overflow-hidden bg-[var(--color-primary-bg)] opacity-0"
-    >
-      <section className="page-section">
-        <HeroPage />
-      </section>
+    <main className="bg-[var(--color-primary-bg)]">
+      <HeroPage />
 
-      <section className="page-section">
-        <PartnerMarque />
-      </section>
+      <PartnerMarque />
 
-      <section className="page-section">
-        <OurGole />
-      </section>
+      <OurGole />
 
-      <section className="page-section">
-        <Cliend />
-      </section>
+      <Cliend />
 
-      <section className="page-section">
-        <Solutions />
-      </section>
+      <Solutions />
+      <PathAnimation />
 
-      <section className="page-section">
-        <PathAnimation />
-      </section>
+      <TeamBuilding />
 
-      <section className="page-section">
-        <TeamBuilding />
-      </section>
+      <PartnerMarque />
 
-      <section className="page-section">
-        <PartnerMarque />
-      </section>
+      <WhyUs />
 
-      <section className="page-section">
-        <WhyUs />
-      </section>
+      <SurgeProtect />
+      <CustomerReviews />
 
-      <section className="page-section">
-        <SurgeProtect />
-      </section>
-
-      <section className="page-section">
-        <CustomerReviews />
-      </section>
-
-      <section className="page-section">
-        <ResourcesSection />
-      </section>
+      <ResourcesSection />
     </main>
   );
 };

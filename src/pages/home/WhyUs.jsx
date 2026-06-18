@@ -232,66 +232,95 @@ const WhyUs = () => {
     let shapeProgress = 0;
     let lastActive = activeRef.current;
 
+    // Dot-matrix glyphs for "1".."5" on a 7-row x 5-column grid.
+    // Each entry is [row, col]. This grid is taller (7 rows) so digits
+    // like 2, 3, 5 read clearly instead of looking like scattered dots.
     const numberShapes = {
+      // "1"
       0: [
         [0, 2],
+        [1, 1],
         [1, 2],
         [2, 2],
         [3, 2],
         [4, 2],
         [5, 2],
+        [6, 1],
+        [6, 2],
+        [6, 3],
       ],
+      // "2"
       1: [
         [0, 1],
         [0, 2],
         [0, 3],
-        [1, 3],
-        [2, 2],
-        [3, 1],
-        [4, 1],
-        [5, 1],
-        [5, 2],
-        [5, 3],
-      ],
-      2: [
-        [0, 1],
-        [0, 2],
-        [0, 3],
-        [1, 3],
-        [2, 2],
-        [3, 3],
-        [4, 3],
-        [5, 1],
-        [5, 2],
-        [5, 3],
-      ],
-      3: [
-        [0, 1],
-        [0, 3],
-        [1, 1],
-        [1, 3],
-        [2, 1],
-        [2, 2],
-        [2, 3],
-        [3, 3],
-        [4, 3],
-        [5, 3],
-      ],
-      4: [
-        [0, 1],
-        [0, 2],
-        [0, 3],
-        [1, 1],
-        [2, 1],
-        [2, 2],
-        [2, 3],
+        [1, 0],
+        [1, 4],
+        [2, 4],
         [3, 3],
         [4, 2],
         [5, 1],
-        [5, 2],
+        [6, 0],
+        [6, 1],
+        [6, 2],
+        [6, 3],
+        [6, 4],
+      ],
+      // "3"
+      2: [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [1, 4],
+        [2, 4],
+        [3, 2],
+        [3, 3],
+        [4, 4],
+        [5, 4],
+        [6, 0],
+        [6, 1],
+        [6, 2],
+        [6, 3],
+      ],
+      // "4"
+      3: [
+        [0, 3],
+        [1, 2],
+        [1, 3],
+        [2, 1],
+        [2, 3],
+        [3, 0],
+        [3, 3],
+        [4, 0],
+        [4, 1],
+        [4, 2],
+        [4, 3],
+        [4, 4],
         [5, 3],
+        [6, 3],
+      ],
+      // "5"
+      4: [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [1, 0],
+        [2, 0],
+        [3, 0],
+        [3, 1],
+        [3, 2],
+        [4, 3],
+        [5, 0],
+        [5, 3],
+        [6, 1],
+        [6, 2],
       ],
     };
+
+    const GRID_ROWS = 7;
+    const GRID_COLS = 5;
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -309,6 +338,7 @@ const WhyUs = () => {
     };
 
     const drawRing = (x, y, r, color, progress, start, width = 7) => {
+      if (progress <= 0) return;
       ctx.beginPath();
       ctx.arc(x, y, r, start, start + Math.PI * 2 * progress);
       ctx.strokeStyle = color;
@@ -321,7 +351,7 @@ const WhyUs = () => {
       ctx.save();
       ctx.globalAlpha = 0.08;
       ctx.fillStyle = "#FFCC00";
-      ctx.font = "900 260px Arimo";
+      ctx.font = "900 260px Arimo, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(num, cx, cy);
@@ -341,36 +371,43 @@ const WhyUs = () => {
 
       const cx = w / 2;
       const cy = h / 2;
-      const r = Math.min(w, h) / 15;
-      const gap = r * 1.95;
 
-      const startX = cx - gap * 2;
-      const startY = cy - gap * 2.7;
+      // Cell radius/spacing derived from available height so the full
+      // 7-row grid always fits comfortably inside the canvas.
+      const r = Math.min(w / (GRID_COLS + 2), h / (GRID_ROWS + 2)) * 0.62;
+      const gap = r * 2.1;
 
-      const activeShape = numberShapes[activeRef.current];
+      const gridW = (GRID_COLS - 1) * gap;
+      const gridH = (GRID_ROWS - 1) * gap;
+
+      const startX = cx - gridW / 2;
+      const startY = cy - gridH / 2;
+
+      const activeShape = numberShapes[activeRef.current] || [];
       const activeSet = new Set(
         activeShape.map(([row, col]) => `${row}-${col}`),
       );
 
       drawNumberLabel(activeRef.current + 1, cx, cy);
 
-      for (let row = 0; row < 6; row++) {
-        for (let col = 0; col < 5; col++) {
-          const x = startX + col * gap + (row % 2 ? gap * 0.18 : 0);
+      for (let row = 0; row < GRID_ROWS; row++) {
+        for (let col = 0; col < GRID_COLS; col++) {
+          const x = startX + col * gap;
           const y = startY + row * gap;
 
+          // Faint background dot grid
           drawRing(x, y, r, "rgba(241,224,174,0.55)", 0.999, 0, 5);
 
           const isActive = activeSet.has(`${row}-${col}`);
 
           if (isActive) {
-            const indexDelay = (row + col) * 0.055;
+            const indexDelay = (row + col) * 0.045;
             const localProgress = Math.max(
               0,
-              Math.min(1, shapeProgress - indexDelay),
+              Math.min(1, (shapeProgress - indexDelay) / (1 - indexDelay)),
             );
 
-            const ringFill = 0.15 + localProgress * 0.82;
+            const ringFill = 0.15 + localProgress * 0.85;
 
             drawRing(
               x,

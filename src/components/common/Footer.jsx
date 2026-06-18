@@ -40,14 +40,127 @@ const Footer = () => {
     let mouseX = 0.5;
     let mouseY = 0.5;
 
+    // Each expression is described by a small set of numeric params so we
+    // can smoothly interpolate ("morph") between any two expressions.
+    // mouthStart/mouthEnd: arc angles (as multiples of PI) for the mouth curve
+    // mouthRadius: how big the mouth arc is
+    // mouthOffsetY: vertical offset of the mouth from face center
+    // mouthWidth: stroke width of the mouth
+    // eyeSleepy: 0 = normal round eye, 1 = fully closed/sleepy arc eye
+    // eyeRadius: eye size
+    // secondaryMouth: optional inner lip line (0 = none, 1 = full)
+    const expressionLibrary = {
+      bigSmile: {
+        mouthStart: 0.1,
+        mouthEnd: 0.9,
+        mouthRadius: 28,
+        mouthOffsetY: 0,
+        mouthWidth: 4,
+        eyeSleepy: 0,
+        eyeRadius: 9,
+        secondaryMouth: 1,
+      },
+      longFace: {
+        mouthStart: 0.25,
+        mouthEnd: 0.75,
+        mouthRadius: 30,
+        mouthOffsetY: -2,
+        mouthWidth: 3,
+        eyeSleepy: 0,
+        eyeRadius: 8,
+        secondaryMouth: 0.4,
+      },
+      sideSmile: {
+        mouthStart: 0.15,
+        mouthEnd: 0.75,
+        mouthRadius: 16,
+        mouthOffsetY: 6,
+        mouthWidth: 3.5,
+        eyeSleepy: 0,
+        eyeRadius: 9,
+        secondaryMouth: 0,
+      },
+      surprise: {
+        mouthStart: 0,
+        mouthEnd: 2,
+        mouthRadius: 9,
+        mouthOffsetY: 11,
+        mouthWidth: 3,
+        eyeSleepy: 0,
+        eyeRadius: 8.5,
+        secondaryMouth: 0,
+        roundMouth: true,
+      },
+      sleepy: {
+        mouthStart: 0.2,
+        mouthEnd: 0.8,
+        mouthRadius: 14,
+        mouthOffsetY: 8,
+        mouthWidth: 3,
+        eyeSleepy: 1,
+        eyeRadius: 10,
+        secondaryMouth: 0,
+      },
+      happy: {
+        mouthStart: 0.14,
+        mouthEnd: 0.86,
+        mouthRadius: 22,
+        mouthOffsetY: 3,
+        mouthWidth: 4,
+        eyeSleepy: 0,
+        eyeRadius: 8,
+        secondaryMouth: 0,
+      },
+      wink: {
+        mouthStart: 0.15,
+        mouthEnd: 0.85,
+        mouthRadius: 24,
+        mouthOffsetY: 2,
+        mouthWidth: 4,
+        eyeSleepy: 0.5,
+        eyeRadius: 9,
+        secondaryMouth: 0,
+      },
+    };
+
+    const expressionNames = Object.keys(expressionLibrary);
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const easeInOutCubic = (t) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const lerpExpression = (a, b, t) => {
+      const e = easeInOutCubic(Math.max(0, Math.min(1, t)));
+      const out = {};
+      for (const key of Object.keys(a)) {
+        if (typeof a[key] === "number") {
+          out[key] = lerp(a[key], b[key] ?? a[key], e);
+        }
+      }
+      out.roundMouth = e > 0.5 ? b.roundMouth : a.roundMouth;
+      return out;
+    };
+
+    const pickNextExpression = (currentName) => {
+      const candidates = expressionNames.filter((n) => n !== currentName);
+      return candidates[Math.floor(Math.random() * candidates.length)];
+    };
+
     const faces = [
-      { x: 0.17, y: 0.28, s: 1.15, type: "big-smile" },
-      { x: 0.44, y: 0.16, s: 1.05, type: "long-face" },
-      { x: 0.77, y: 0.28, s: 1.1, type: "side-smile" },
-      { x: 0.88, y: 0.5, s: 0.92, type: "surprise" },
-      { x: 0.16, y: 0.62, s: 0.9, type: "sleepy" },
-      { x: 0.76, y: 0.64, s: 0.95, type: "happy" },
-    ];
+      { x: 0.17, y: 0.28, s: 1.15, startName: "bigSmile" },
+      { x: 0.44, y: 0.16, s: 1.05, startName: "longFace" },
+      { x: 0.77, y: 0.28, s: 1.1, startName: "sideSmile" },
+      { x: 0.88, y: 0.5, s: 0.92, startName: "surprise" },
+      { x: 0.16, y: 0.62, s: 0.9, startName: "sleepy" },
+      { x: 0.76, y: 0.64, s: 0.95, startName: "happy" },
+    ].map((face, i) => ({
+      ...face,
+      fromName: face.startName,
+      toName: face.startName,
+      morph: 1, // 1 = fully settled on toName
+      nextSwitchAt: 3 + Math.random() * 4 + i * 0.6,
+      holdTime: 0,
+    }));
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -64,15 +177,39 @@ const Footer = () => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    const drawEye = (x, y, r, lookX, lookY, sleepy = false) => {
+    const drawEye = (x, y, r, lookX, lookY, sleepyAmount = 0) => {
       ctx.lineWidth = 3;
       ctx.strokeStyle = "#000";
       ctx.lineCap = "round";
 
-      if (sleepy) {
+      if (sleepyAmount > 0.05) {
+        // Blend between a full round eye and a sleepy closed arc
+        const openR = r * (1 - sleepyAmount * 0.55);
+
         ctx.beginPath();
-        ctx.arc(x, y, r, Math.PI * 0.15, Math.PI * 0.85);
+        ctx.ellipse(
+          x,
+          y,
+          r * 0.85,
+          Math.max(2, openR),
+          0,
+          Math.PI * 0.15 * sleepyAmount,
+          Math.PI * (1 - 0.15 * sleepyAmount),
+        );
         ctx.stroke();
+
+        if (sleepyAmount < 0.92) {
+          ctx.beginPath();
+          ctx.arc(
+            x + lookX * r * 0.38,
+            y + lookY * r * 0.35,
+            Math.max(1, r * 0.3 * (1 - sleepyAmount)),
+            0,
+            Math.PI * 2,
+          );
+          ctx.fillStyle = "#000";
+          ctx.fill();
+        }
         return;
       }
 
@@ -98,97 +235,71 @@ const Footer = () => {
       const lookX = (mouseX - 0.5) * 1.4 + Math.sin(time + index) * 0.12;
       const lookY = (mouseY - 0.5) * 1.2 + Math.cos(time + index) * 0.08;
 
+      const from = expressionLibrary[face.fromName];
+      const to = expressionLibrary[face.toName];
+      const params = lerpExpression(from, to, face.morph);
+
+      // Left eye gets a partial wink blend if either side is winking
+      const winkBlend =
+        (face.fromName === "wink" ? 1 - face.morph : 0) +
+        (face.toName === "wink" ? face.morph : 0);
+
       ctx.save();
       ctx.translate(x, y);
       ctx.scale(face.s, face.s);
       ctx.rotate(Math.sin(time * 0.7 + index) * 0.08);
 
-      if (face.type === "big-smile") {
-        drawEye(-15, -12, 9, lookX, lookY);
-        drawEye(15, -12, 9, lookX, lookY);
+      // Eyes — right eye always reflects normal sleepy amount,
+      // left eye gets extra wink closure blended in.
+      drawEye(-15, -12, params.eyeRadius, lookX, lookY, params.eyeSleepy);
+      drawEye(
+        15,
+        -12,
+        params.eyeRadius,
+        lookX,
+        lookY,
+        Math.min(1, params.eyeSleepy + winkBlend),
+      );
 
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 4;
-        ctx.lineCap = "round";
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = params.mouthWidth;
+      ctx.lineCap = "round";
 
+      if (params.roundMouth) {
         ctx.beginPath();
-        ctx.arc(0, 0, 28, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.arc(
+          0,
+          params.mouthOffsetY,
+          params.mouthRadius + Math.sin(time * 2.2 + index) * 2,
+          0,
+          Math.PI * 2,
+        );
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(
+          0,
+          params.mouthOffsetY,
+          params.mouthRadius,
+          params.mouthStart * Math.PI,
+          params.mouthEnd * Math.PI,
+        );
         ctx.stroke();
 
-        ctx.beginPath();
-        ctx.arc(0, 6, 18, 0.15 * Math.PI, 0.85 * Math.PI);
-        ctx.stroke();
-      }
-
-      if (face.type === "long-face") {
-        drawEye(-12, -16, 8, lookX, lookY);
-        drawEye(12, -16, 8, lookX, lookY);
-
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 3;
-        ctx.lineCap = "round";
-
-        ctx.beginPath();
-        ctx.arc(0, 6, 13, 0.15 * Math.PI, 0.85 * Math.PI);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(0, -2, 30, 0.25 * Math.PI, 0.75 * Math.PI);
-        ctx.stroke();
-      }
-
-      if (face.type === "side-smile") {
-        drawEye(-12, -10, 9, lookX, lookY);
-        drawEye(12, -10, 9, lookX, lookY);
-
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 3.5;
-        ctx.lineCap = "round";
-
-        ctx.beginPath();
-        ctx.arc(0, 6, 16, 0.15 * Math.PI, 0.75 * Math.PI);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(-8, 2, 25, Math.PI * 1.1, Math.PI * 1.55);
-        ctx.stroke();
-      }
-
-      if (face.type === "surprise") {
-        drawEye(-13, -13, 8, lookX, lookY);
-        drawEye(13, -13, 8, lookX, lookY);
-
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(0, 11, 8 + Math.sin(time * 2.2 + index) * 2, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      if (face.type === "sleepy") {
-        drawEye(-13, -11, 10, lookX, lookY, true);
-        drawEye(13, -11, 10, lookX, lookY, true);
-
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 3;
-        ctx.lineCap = "round";
-
-        ctx.beginPath();
-        ctx.arc(0, 8, 14, 0.2 * Math.PI, 0.8 * Math.PI);
-        ctx.stroke();
-      }
-
-      if (face.type === "happy") {
-        drawEye(-14, -12, 8, lookX, lookY);
-        drawEye(14, -12, 8, lookX, lookY);
-
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 4;
-        ctx.lineCap = "round";
-
-        ctx.beginPath();
-        ctx.arc(0, 3, 22, 0.14 * Math.PI, 0.86 * Math.PI);
-        ctx.stroke();
+        if (params.secondaryMouth > 0.05) {
+          ctx.save();
+          ctx.globalAlpha = params.secondaryMouth;
+          ctx.beginPath();
+          ctx.arc(
+            0,
+            params.mouthOffsetY + 6,
+            params.mouthRadius * 0.64,
+            (params.mouthStart + 0.05) * Math.PI,
+            (params.mouthEnd - 0.05) * Math.PI,
+          );
+          ctx.stroke();
+          ctx.restore();
+        }
       }
 
       ctx.restore();
@@ -222,6 +333,28 @@ const Footer = () => {
       });
     };
 
+    const MORPH_DURATION = 0.7; // seconds-ish, scaled by our time increment
+
+    const updateFaceExpression = (face) => {
+      if (face.morph < 1) {
+        face.morph += 0.022 / MORPH_DURATION;
+        if (face.morph >= 1) {
+          face.morph = 1;
+          face.fromName = face.toName;
+        }
+        return;
+      }
+
+      face.holdTime += 0.015;
+      if (face.holdTime >= face.nextSwitchAt) {
+        face.fromName = face.toName;
+        face.toName = pickNextExpression(face.fromName);
+        face.morph = 0;
+        face.holdTime = 0;
+        face.nextSwitchAt = 3 + Math.random() * 4;
+      }
+    };
+
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       time += 0.015;
@@ -229,6 +362,7 @@ const Footer = () => {
       drawMarks();
 
       faces.forEach((face, index) => {
+        updateFaceExpression(face);
         drawFace(face, index);
       });
 
