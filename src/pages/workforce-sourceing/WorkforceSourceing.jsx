@@ -4,6 +4,11 @@ import SourceFrom from "./SourceFrom";
 import PartnerMarque from "../../components/common/PartnerMarque";
 import WhyChoseClient from "./WhyChoseClient";
 import Countrys from "./Countrys";
+import Industrys from "../../components/common/Industrys";
+import Process from "./Process";
+import PathAnimation from "../home/PathAnimation";
+import FAQs from "../../components/common/FAQs";
+import Resources from "../../components/common/Resources";
 
 const WorkforceSourceing = () => {
   return (
@@ -13,7 +18,11 @@ const WorkforceSourceing = () => {
       <SourceFrom />
       <Countrys />
       <WhyChoseClient />
-      <div className="min-h-[50vh]"></div>
+      <Industrys />
+      <Process />
+      <PathAnimation />
+      <FAQs />
+      <Resources />
     </div>
   );
 };

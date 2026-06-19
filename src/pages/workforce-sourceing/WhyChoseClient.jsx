@@ -40,6 +40,161 @@ const cards = [
   },
 ];
 
+const AnimatedBookButton = () => {
+  const canvasRef = useRef(null);
+  const hoverRef = useRef(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    let frame;
+    let time = 0;
+    let hover = 0;
+
+    const w = 320;
+    const h = 140;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    const drawArrow = (x, y, angle, scale = 1) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.scale(scale, scale);
+
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 4;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      ctx.beginPath();
+      ctx.moveTo(-20, 0);
+      ctx.quadraticCurveTo(-8, -10, 8, -4);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(8, -4);
+      ctx.lineTo(0, -13);
+      ctx.moveTo(8, -4);
+      ctx.lineTo(0, 6);
+      ctx.stroke();
+
+      ctx.restore();
+    };
+
+    const drawDot = (x, y, r) => {
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = "#000";
+      ctx.fill();
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+
+      time += 0.02;
+      hover += ((hoverRef.current ? 1 : 0) - hover) * 0.09;
+
+      const clickPulse = hoverRef.current
+        ? 1 + Math.sin(time * 12) * 0.08
+        : 1 + Math.sin(time * 2) * 0.03;
+
+      const arrows = [
+        {
+          from: [50, 35, 0.15],
+          to: [110, 55, 0.45],
+        },
+        {
+          from: [270, 35, Math.PI - 0.15],
+          to: [210, 55, Math.PI - 0.45],
+        },
+        {
+          from: [70, 105, -0.45],
+          to: [112, 85, -0.15],
+        },
+        {
+          from: [250, 105, Math.PI + 0.45],
+          to: [208, 85, Math.PI + 0.15],
+        },
+      ];
+
+      arrows.forEach((item, i) => {
+        const wave = Math.sin(time * 2 + i) * (1 - hover) * 6;
+        const x = lerp(item.from[0], item.to[0], hover);
+        const y = lerp(item.from[1], item.to[1], hover) + wave;
+        const angle = lerp(item.from[2], item.to[2], hover);
+
+        drawArrow(x, y, angle, clickPulse);
+      });
+
+      const dots = [
+        {
+          from: [42, 78],
+          to: [120, 70],
+        },
+        {
+          from: [118, 18],
+          to: [145, 48],
+        },
+        {
+          from: [278, 78],
+          to: [200, 70],
+        },
+        {
+          from: [180, 118],
+          to: [170, 92],
+        },
+      ];
+
+      dots.forEach((item, i) => {
+        const x = lerp(item.from[0], item.to[0], hover);
+        const y =
+          lerp(item.from[1], item.to[1], hover) +
+          Math.sin(time * 2.5 + i) * (1 - hover) * 4;
+
+        drawDot(x, y, 4 + hover * 1.5);
+      });
+
+      frame = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  return (
+    <div
+      onMouseEnter={() => (hoverRef.current = true)}
+      onMouseLeave={() => (hoverRef.current = false)}
+      className="relative mx-auto mt-12 flex h-[140px] w-[320px] items-center justify-center overflow-visible"
+    >
+      <canvas
+        ref={canvasRef}
+        className="pointer-events-none absolute inset-0"
+      />
+
+      <a
+        href="/contact"
+        className="group relative z-10 inline-flex overflow-hidden rounded-full bg-black px-7 py-3 text-sm font-bold text-white transition-all duration-500 hover:scale-110 active:scale-95"
+      >
+        <span className="absolute inset-0 w-0 bg-yellow-400 transition-all duration-700 ease-out group-hover:w-full" />
+        <span className="relative z-10 transition-colors duration-500 group-hover:text-black">
+          Build your Team
+        </span>
+      </a>
+    </div>
+  );
+};
+
 const WhyChoseClient = () => {
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
@@ -151,8 +306,8 @@ const WhyChoseClient = () => {
 
       drawArrowBird(w * 0.2, h * 0.2, 0.2, 1, 1);
       drawArrowBird(w * 0.78, h * 0.18, -0.35, 0.9, 2);
-      drawArrowBird(w * 0.32, h * 0.92, 0.4, 1.05, 3);
-      drawArrowBird(w * 0.72, h * 0.88, -0.25, 0.9, 4);
+      // drawArrowBird(w * 0.32, h * 0.92, 0.4, 1.05, 3);
+      // drawArrowBird(w * 0.72, h * 0.88, -0.25, 0.9, 4);
 
       drawDot(w * 0.14, h * 0.52, 4, 5);
       drawDot(w * 0.86, h * 0.5, 4, 6);
@@ -197,7 +352,7 @@ const WhyChoseClient = () => {
       >
         <path
           d="M0 150V95C210 35 470 75 720 52C980 28 1210 55 1440 105V150H0Z"
-          fill="var(--color-primary-bg)"
+          fill="#CFF7BC"
         />
       </svg>
 
@@ -245,15 +400,7 @@ const WhyChoseClient = () => {
         </div>
 
         <div className="why-client-reveal mt-10 flex justify-center">
-          <a
-            href="/contact"
-            className="group relative overflow-hidden rounded-full bg-black px-7 py-3 text-sm font-bold text-white"
-          >
-            <span className="absolute inset-0 w-0 bg-yellow-400 transition-all duration-700 ease-out group-hover:w-full" />
-            <span className="relative z-10 transition-colors duration-500 group-hover:text-black">
-              Connect with us
-            </span>
-          </a>
+          <AnimatedBookButton />
         </div>
       </div>
     </section>

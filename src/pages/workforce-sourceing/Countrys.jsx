@@ -66,7 +66,7 @@ const countries = [
     name: "Sri Lanka",
     flag: "https://flagcdn.com/h80/lk.png",
     image:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1612862862126-865765df2ded?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tag: "Hospitality Ready",
     why: "Reliable for hotel, cleaning, facility management, kitchen and service operations.",
     stat: "87%",
@@ -90,7 +90,7 @@ const countries = [
     name: "Nigeria",
     flag: "https://flagcdn.com/h80/ng.png",
     image:
-      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=700&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1537372023620-37161b1ad8ac?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tag: "Energetic Workforce",
     why: "Great for retail, warehouse, logistics, cleaning, operations and support roles.",
     stat: "86%",
@@ -172,7 +172,7 @@ const Countrys = () => {
       >
         <path
           d="M0 160V95C230 35 455 100 720 60C980 24 1210 76 1440 40V160H0Z"
-          fill="var(--color-primary-bg)"
+          fill="#FFE994"
         />
       </svg>
 
