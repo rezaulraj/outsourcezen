@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { WorldMap } from "react-svg-worldmap";
 import { gsap } from "gsap";
 
-// High-fidelity country data matching the coordinates blueprint map
 const COUNTRIES = [
   {
     code: "np",
@@ -76,6 +76,12 @@ const COUNTRIES = [
     agent: "https://i.pravatar.cc/120?img=58",
   },
 ];
+
+// Formatting target nodes for the underlying SVG engine
+const MAP_DATA = COUNTRIES.map((c) => ({
+  country: c.code,
+  value: 100, // Even fill weight across the target network
+}));
 
 const WORLD_DOTS = [
   // North America
@@ -253,10 +259,8 @@ const SourceFrom = () => {
     offsetY: 0,
   });
 
-  // Core Entrance Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Beautiful, scaled entrance for your custom teal backdrop ellipse
       gsap.fromTo(
         ".source-backdrop-curve",
         { scale: 0.92, opacity: 0, filter: "blur(10px)" },
@@ -269,7 +273,6 @@ const SourceFrom = () => {
         },
       );
 
-      // Smooth Text Word Animations
       gsap.from(".source-word", {
         y: 60,
         opacity: 0,
@@ -279,7 +282,6 @@ const SourceFrom = () => {
         ease: "power4.out",
       });
 
-      // Elegant Heading Curve Path Drawing Simulation
       if (pathRef.current) {
         const pathLength = pathRef.current.getTotalLength();
         gsap.fromTo(
@@ -303,7 +305,6 @@ const SourceFrom = () => {
         ease: "power3.out",
       });
 
-      // Precise tracking entry logic for geographical pinned nodes
       gsap.fromTo(
         pinRefs.current,
         { opacity: 0, scale: 0, y: -40 },
@@ -334,7 +335,6 @@ const SourceFrom = () => {
     return () => ctx.revert();
   }, []);
 
-  // Canvas Responsive World Dots Engine
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -398,8 +398,7 @@ const SourceFrom = () => {
 
         ctx.beginPath();
         ctx.arc(scrX, scrY, dotR * local, 0, Math.PI * 2);
-        // Deep indigo shade contrasting beautifully against your customized light teal curve
-        ctx.fillStyle = `rgba(30, 37, 88, ${0.35 * local})`;
+        ctx.fillStyle = `rgba(30, 37, 88, ${0.15 * local})`;
         ctx.fill();
       });
 
@@ -435,11 +434,26 @@ const SourceFrom = () => {
     });
   };
 
+  const mapStyleProperties = ({ countryCode }) => {
+    const isTargetNode = COUNTRIES.some(
+      (c) => c.code === countryCode.toLowerCase(),
+    );
+    return {
+      fill: isTargetNode ? "#ecf75f" : "#f1f5f9",
+      fillOpacity: isTargetNode ? 1.0 : 0.6,
+      stroke: "#4372af",
+      strokeWidth: 1,
+      strokeOpacity: 0.8,
+      transition: "all 0.3s ease",
+    };
+  };
+
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden bg-transparent py-20 lg:py-28 font-arimo"
+      className="relative w-full overflow-hidden py-20 lg:py-28 font-arimo"
     >
+      {/* Top 50% curve */}
       <div
         className="source-backdrop-curve absolute inset-x-0 top-0 h-full bg-[#FFF9E6]"
         style={{
@@ -447,6 +461,23 @@ const SourceFrom = () => {
         }}
       />
 
+      {/* Bottom visible curvy road cut */}
+      <svg
+        className="pointer-events-none absolute bottom-0 left-0 z-[2] h-[190px] w-full"
+        viewBox="0 0 1440 190"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0 85
+       C160 145 300 25 470 90
+       C640 155 790 35 960 95
+       C1130 155 1280 35 1440 90
+       L1440 190
+       L0 190
+       Z"
+          fill="var(--color-primary-bg)"
+        />
+      </svg>
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-20 max-w-2xl text-center flex flex-col items-center">
           <h2 className="relative text-4xl font-normal tracking-tight text-gray-950 sm:text-5xl lg:text-6xl pb-4">
@@ -455,7 +486,6 @@ const SourceFrom = () => {
                 <span className="source-word inline-block">{word}</span>
               </span>
             ))}
-
             <div className="absolute left-1/2 bottom-0 w-48 sm:w-64 h-3 -translate-x-1/2 overflow-visible">
               <svg
                 viewBox="0 0 200 12"
@@ -481,11 +511,21 @@ const SourceFrom = () => {
 
         <div
           ref={mapContainerRef}
-          className="source-reveal relative mx-auto w-full max-w-5xl aspect-[2/1] min-h-[360px] sm:min-h-[460px] lg:min-h-[520px]"
+          className="source-reveal relative mx-auto w-full max-w-4xl aspect-[2/1] min-h-[360px] sm:min-h-[460px] lg:min-h-[520px]"
         >
+          <div className="absolute inset-0 w-full md:left-70 h-full opacity-90 select-none pointer-events-none flex items-center justify-center">
+            <WorldMap
+              data={MAP_DATA}
+              size="responsive"
+              backgroundColor="transparent"
+              styleFunction={mapStyleProperties}
+              showTooltip={false}
+            />
+          </div>
+
           <canvas
             ref={canvasRef}
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none z-10"
           />
 
           {COUNTRIES.map((c, idx) => {
@@ -503,7 +543,7 @@ const SourceFrom = () => {
                   left: `${screenX}px`,
                   top: `${screenY}px`,
                   transform: "translate(-50%, -100%)",
-                  zIndex: 10 + idx,
+                  zIndex: 20 + idx,
                 }}
                 className="flex flex-col items-center cursor-pointer select-none"
               >
@@ -529,17 +569,15 @@ const SourceFrom = () => {
                   <div className="absolute -inset-1.5 rounded-full bg-gradient-to-tr from-[#000] via-[#FFE994] to-amber-400 opacity-60 blur-sm animate-pulse" />
                   <div className="absolute h-16 w-16 -top-1 -left-1 rounded-full bg-[#4eb956]/20 animate-ping duration-[3000ms] pointer-events-none" />
 
-                  {/* Main Avatar Container */}
                   <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-full border-[3px] border-white bg-white overflow-hidden shadow-xl transition-transform duration-300">
                     <img
                       src={c.agent}
-                      alt={`${c.name} Scout Agent`}
+                      alt={`${c.name} Agent`}
                       className="h-full w-full object-cover"
                       draggable="false"
                     />
                   </div>
 
-                  {/* Absolute Country Flag Badge */}
                   <span className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-white shadow-md">
                     <img
                       src={FLAG_URL(c.code)}
@@ -563,14 +601,16 @@ const SourceFrom = () => {
           })}
         </div>
 
-        <div className="source-reveal mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-bold text-gray-950 font-normal">
+        <div className="source-reveal mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-bold text-gray-950">
           <div className="flex items-center gap-2.5 bg-white/90 border border-slate-100 backdrop-blur-md px-5 py-2.5 rounded-full shadow-sm">
             <span className="h-2.5 w-2.5 rounded-full bg-[#4eb956] animate-ping" />
-            <span className="tracking-wide">9 Elite Corridors Vetted</span>
+            <span className="tracking-wide font-normal">
+              9 Elite Corridors Vetted
+            </span>
           </div>
           <div className="flex items-center gap-2.5 bg-white/90 border border-slate-100 backdrop-blur-md px-5 py-2.5 rounded-full shadow-sm">
             <span className="h-2.5 w-2.5 rounded-full bg-[#FFE994]" />
-            <span className="tracking-wide">
+            <span className="tracking-wide font-normal">
               Real-time Local Infrastructure
             </span>
           </div>
