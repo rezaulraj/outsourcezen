@@ -7,6 +7,9 @@ import Overseas from "./pages/overseas/Overseas";
 import ExecutiveSearch from "./pages/executivesearch/ExecutiveSearch";
 import SmoothScroll from "./components/common/SmoothScroll";
 import BulkHiring from "./pages/bulkhiring/BulkHiring";
+import CandidateScreening from "./pages/candidatescreening/CandidateScreening";
+import VisaDocumentation from "./pages/visa-documentation/VisaDocumentation";
+import PreDepartureTraining from "./pages/predeparturetraining/PreDepartureTraining";
 
 function App() {
   return (
@@ -29,9 +32,18 @@ function App() {
               path="/solutions/executive-search"
               element={<ExecutiveSearch />}
             />
+            <Route path="/solutions/bulk-hiring" element={<BulkHiring />} />
             <Route
-              path="/solutions/bulk-hiring"
-              element={<BulkHiring />}
+              path="/solutions/candidate-screening"
+              element={<CandidateScreening />}
+            />
+            <Route
+              path="/solutions/visa-documentation"
+              element={<VisaDocumentation />}
+            />
+            <Route
+              path="/solutions/pre-departure-training"
+              element={<PreDepartureTraining />}
             />
           </Route>
         </Routes>

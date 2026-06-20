@@ -21,10 +21,10 @@ const Header = () => {
           label: "Candidate Screening",
           path: "/solutions/candidate-screening",
         },
-        {
-          label: "Trade Testing & Assessment",
-          path: "/solutions/trade-testing",
-        },
+        // {
+        //   label: "Trade Testing & Assessment",
+        //   path: "/solutions/trade-testing",
+        // },
         {
           label: "Visa & Documentation Support",
           path: "/solutions/visa-documentation",
