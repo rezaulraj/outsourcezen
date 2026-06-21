@@ -9,11 +9,13 @@ import BothPathAnimation from "../../components/common/BothPathAnimation";
 import Countrys from "../workforce-sourceing/Countrys";
 import WhyTrustDocumentation from "./WhyTrustDocumentation";
 import VisaFAQ from "./VisaFAQ";
+import PartnerMarque from "../../components/common/PartnerMarque";
 
 const VisaDocumentation = () => {
   return (
     <div>
       <HeroVisaDocumentation />
+      <PartnerMarque />
       <WhatVisaDocumentation />
       <DocumentsWeHandle />
       <PathAnimation />

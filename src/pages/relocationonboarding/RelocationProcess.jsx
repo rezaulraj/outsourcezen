@@ -1,53 +1,50 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  ClipboardList,
-  GraduationCap,
-  HardHat,
-  Languages,
-  BadgeCheck,
-  Plane,
+  Building2,
+  ClipboardCheck,
+  Home,
+  MapPinCheck,
+  MessageSquareText,
+  PlaneLanding,
 } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
   {
     number: "01",
-    title: "Worker Briefing",
-    text: "We explain job role, employer expectations, travel timeline and basic responsibilities.",
-    icon: ClipboardList,
+    title: "Arrival Planning",
+    text: "We confirm arrival date, destination, receiving point and first movement plan.",
+    icon: ClipboardCheck,
   },
   {
     number: "02",
-    title: "Safety Orientation",
-    text: "Workers learn PPE use, workplace hazards, site rules and safe daily behavior.",
-    icon: HardHat,
+    title: "Airport Receiving",
+    text: "Workers are guided after landing so they know where to go and who to contact.",
+    icon: PlaneLanding,
   },
   {
     number: "03",
-    title: "Job Readiness Training",
-    text: "We prepare workers for daily tasks, discipline, attendance and reporting flow.",
-    icon: GraduationCap,
+    title: "Accommodation Setup",
+    text: "We support housing guidance, shared living rules and settlement expectations.",
+    icon: Home,
   },
   {
     number: "04",
-    title: "Culture & Communication",
-    text: "Workers learn basic workplace culture, respectful communication and adaptation tips.",
-    icon: Languages,
+    title: "Local Orientation",
+    text: "Workers learn basic local rules, transport, timing and daily-life guidance.",
+    icon: MapPinCheck,
   },
   {
     number: "05",
-    title: "Final Assessment",
-    text: "Training understanding is checked before workers are confirmed as deployment-ready.",
-    icon: BadgeCheck,
+    title: "Workplace Onboarding",
+    text: "We coordinate first-day reporting, supervisor contact and workplace introduction.",
+    icon: Building2,
   },
   {
     number: "06",
-    title: "Departure Preparation",
-    text: "Workers are guided on airport process, documents to carry and arrival instructions.",
-    icon: Plane,
+    title: "Follow-up Support",
+    text: "Early communication helps solve adjustment issues and reduce onboarding friction.",
+    icon: MessageSquareText,
   },
 ];
 
@@ -55,14 +52,14 @@ const steps = [
  * THE BUG (original code):
  * The canvas covered the whole section and computed its own evenly
  * spaced points (cx ± 38px, divided evenly down the full section
- * height) for the connecting line, pulsing nodes, and the wandering
- * worker dots. The actual <ProcessCard> elements are laid out by normal
- * document flow (space-y-8, alternating justify-start/justify-end,
- * variable height per card since text length differs) — a different
- * coordinate system entirely. So the nodes and the dot stream floated
- * off the cards instead of tracking the real steps, especially once
- * each card started animating in on its own ScrollTrigger rather than
- * all at once.
+ * height) for the connecting line, pulsing nodes, and the worker dots
+ * traveling down the path. The actual <ProcessCard> elements are laid
+ * out by normal document flow (space-y-8, alternating
+ * justify-start/justify-end, variable height per card since text length
+ * differs) — a different coordinate system entirely. So the nodes and
+ * the worker-dot stream floated off the cards instead of tracking the
+ * real steps, and broke further on resize or when text wrapped
+ * differently.
  *
  * THE FIX:
  * Give each ProcessCard a ref back to the parent, measure their real
@@ -70,11 +67,10 @@ const steps = [
  * canvas to exactly match the card-stack wrapper. Draw the line, nodes,
  * and the traveling worker dots through each card's true inner-edge
  * anchor point at its real vertical center, so everything always lines
- * up with the actual steps regardless of viewport width or content
- * length.
+ * up with the actual steps.
  */
 
-const TrainingProcess = () => {
+const RelocationProcess = () => {
   const sectionRef = useRef(null);
   const canvasRef = useRef(null);
   const cardRefs = useRef([]);
@@ -82,7 +78,7 @@ const TrainingProcess = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".training-process-word", {
+      gsap.from(".relocation-process-word", {
         y: 55,
         opacity: 0,
         rotateX: 60,
@@ -91,7 +87,7 @@ const TrainingProcess = () => {
         ease: "power4.out",
       });
 
-      gsap.from(".training-process-reveal", {
+      gsap.from(".relocation-process-reveal", {
         y: 35,
         opacity: 0,
         duration: 0.85,
@@ -100,35 +96,23 @@ const TrainingProcess = () => {
         ease: "power3.out",
       });
 
-      gsap.from(".training-process-line", {
+      gsap.from(".relocation-process-card", {
+        y: 45,
+        opacity: 0,
+        scale: 0.96,
+        duration: 0.8,
+        stagger: 0.1,
+        delay: 0.4,
+        ease: "power3.out",
+      });
+
+      gsap.from(".relocation-process-line", {
         scaleX: 0,
         opacity: 0,
         transformOrigin: "center",
         duration: 1,
         delay: 0.55,
         ease: "power3.out",
-      });
-
-      // Each step card gets its own ScrollTrigger instead of a single
-      // on-mount stagger, so cards further down the page actually animate
-      // in when they reach the viewport, rather than finishing their
-      // animation before the user ever scrolls to them.
-      gsap.utils.toArray(".training-process-card").forEach((card, i) => {
-        const isRight = i % 2 !== 0;
-
-        gsap.from(card, {
-          y: 50,
-          opacity: 0,
-          scale: 0.96,
-          rotate: isRight ? 2 : -2,
-          duration: 0.7,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        });
       });
     }, sectionRef);
 
@@ -242,18 +226,11 @@ const TrainingProcess = () => {
       ctx.setLineDash([]);
 
       const p = (time * 0.22 + i * 0.14) % 1;
-      const midX = (x1 + x2) / 2;
-
-      const cx = (1 - p) * (1 - p) * x1 + 2 * (1 - p) * p * midX + p * p * x2;
+      const cx =
+        (1 - p) * (1 - p) * x1 + 2 * (1 - p) * p * ((x1 + x2) / 2) + p * p * x2;
       const cy = (1 - p) * (1 - p) * y1 + 2 * (1 - p) * p * midY + p * p * y2;
 
-      // Tangent direction of the quadratic bezier at parameter p, so the
-      // travelling arrow actually points the way the curve is heading
-      // instead of a fixed fraction of the straight start-to-end angle.
-      const tx = 2 * (1 - p) * (midX - x1) + 2 * p * (x2 - midX);
-      const ty = 2 * (1 - p) * (midY - y1) + 2 * p * (y2 - midY);
-
-      drawArrow(cx, cy, Math.atan2(ty, tx), 0.52, i);
+      drawArrow(cx, cy, Math.atan2(y2 - y1, x2 - x1) * 0.35, 0.52, i);
     };
 
     const drawNode = (x, y, i) => {
@@ -281,7 +258,7 @@ const TrainingProcess = () => {
         -Math.PI / 2 + time * 0.4,
         -Math.PI / 2 + time * 0.4 + Math.PI * 2 * (0.45 + pulse * 0.34),
       );
-      ctx.strokeStyle = "#F4C542";
+      ctx.strokeStyle = i === steps.length - 1 ? "#67D946" : "#F4C542";
       ctx.lineWidth = 5;
       ctx.lineCap = "round";
       ctx.stroke();
@@ -308,11 +285,12 @@ const TrainingProcess = () => {
       points.forEach((p, i) => drawNode(p.x, p.y, i));
 
       const midX = w / 2;
-      for (let i = 0; i < 20; i++) {
-        const p = (time * 0.12 + i / 20) % 1;
+      for (let i = 0; i < 22; i++) {
+        const p = (time * 0.12 + i / 22) % 1;
         const y = top + totalH * p;
         const x = midX + Math.sin(p * Math.PI * 5) * 58;
-        drawWorker(x, y, 3, p > 0.7 ? "#67D946" : "#F4C542");
+
+        drawWorker(x, y, 3, p > 0.74 ? "#67D946" : "#F4C542");
       }
 
       frame = requestAnimationFrame(draw);
@@ -338,15 +316,15 @@ const TrainingProcess = () => {
       className="font-arimo relative overflow-hidden bg-[var(--color-primary-bg)] py-24 lg:py-32"
     >
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="training-process-reveal mx-auto mb-16 max-w-3xl text-center">
+        <div className="relocation-process-reveal mx-auto mb-16 max-w-3xl text-center">
           <p className="mb-3 inline-block border-b border-black text-sm font-medium text-black">
-            Training Process
+            Our Relocation Process
           </p>
 
           <h2 className="text-4xl font-normal tracking-[-0.045em] text-black sm:text-5xl lg:text-6xl">
-            {["From", "briefing", "to", "departure"].map((word) => (
+            {["From", "landing", "to", "workplace", "start"].map((word) => (
               <span key={word} className="inline-block overflow-hidden px-1">
-                <span className="training-process-word inline-block">
+                <span className="relocation-process-word inline-block">
                   {word}
                 </span>
               </span>
@@ -354,12 +332,12 @@ const TrainingProcess = () => {
           </h2>
 
           <svg
-            className="training-process-line mx-auto mt-3 h-5 w-[340px] max-w-full"
-            viewBox="0 0 340 24"
+            className="relocation-process-line mx-auto mt-3 h-5 w-[360px] max-w-full"
+            viewBox="0 0 360 24"
             fill="none"
           >
             <path
-              d="M12 15C75 5 135 8 170 13C230 21 285 10 328 7"
+              d="M12 15C80 5 145 8 180 13C245 21 300 10 348 7"
               stroke="black"
               strokeWidth="3"
               strokeLinecap="round"
@@ -367,8 +345,8 @@ const TrainingProcess = () => {
           </svg>
 
           <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-black/70">
-            A simple step-by-step training flow that prepares workers for job
-            duties, safety, culture, assessment and final travel readiness.
+            A practical post-arrival flow that helps workers settle, understand
+            local guidance and begin work with less confusion.
           </p>
         </div>
 
@@ -426,7 +404,7 @@ const ProcessCard = ({ step, index, cardRef }) => {
 
   return (
     <div
-      className={`training-process-card relative flex ${
+      className={`relocation-process-card relative flex ${
         isRight ? "lg:justify-end" : "lg:justify-start"
       }`}
     >
@@ -462,4 +440,4 @@ const ProcessCard = ({ step, index, cardRef }) => {
   );
 };
 
-export default TrainingProcess;
+export default RelocationProcess;

@@ -10,6 +10,9 @@ import BulkHiring from "./pages/bulkhiring/BulkHiring";
 import CandidateScreening from "./pages/candidatescreening/CandidateScreening";
 import VisaDocumentation from "./pages/visa-documentation/VisaDocumentation";
 import PreDepartureTraining from "./pages/predeparturetraining/PreDepartureTraining";
+import RelocationOnboarding from "./pages/relocationonboarding/RelocationOnboarding";
+import Construction from "./pages/industry/construction/Construction";
+import Manufacturing from "./pages/industry/manufacturing/Manufacturing";
 
 function App() {
   return (
@@ -44,6 +47,15 @@ function App() {
             <Route
               path="/solutions/pre-departure-training"
               element={<PreDepartureTraining />}
+            />
+            <Route
+              path="/solutions/relocation-onboarding"
+              element={<RelocationOnboarding />}
+            />
+            <Route path="/industries/construction" element={<Construction />} />
+            <Route
+              path="/industries/manufacturing"
+              element={<Manufacturing />}
             />
           </Route>
         </Routes>

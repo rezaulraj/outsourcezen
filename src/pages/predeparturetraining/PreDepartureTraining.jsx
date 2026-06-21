@@ -9,11 +9,13 @@ import BenefitsForEmployers from "./BenefitsForEmployers";
 import PathAnimation from "../home/PathAnimation";
 import Countrys from "../workforce-sourceing/Countrys";
 import Resources from "../../components/common/Resources";
+import PartnerMarque from "../../components/common/PartnerMarque";
 
 const PreDepartureTraining = () => {
   return (
     <div>
       <HeroPreDepartureTraining />
+      <PartnerMarque />
       <WhatPreDepartureTraining />
       <WhyItMatters />
       <BothPathAnimation />

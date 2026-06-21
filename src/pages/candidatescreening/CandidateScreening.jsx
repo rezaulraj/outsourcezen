@@ -9,11 +9,13 @@ import Industrys from "../../components/common/Industrys";
 import WhyChooseScreening from "./WhyChooseScreening";
 import Countrys from "../workforce-sourceing/Countrys";
 import Resources from "../../components/common/Resources";
+import PartnerMarque from "../../components/common/PartnerMarque";
 
 const CandidateScreening = () => {
   return (
     <div>
       <HeroCandidateScreening />
+      <PartnerMarque />
       <PathAnimation />
       <WhatCandidateScreening />
       <ScreeningChallenges />

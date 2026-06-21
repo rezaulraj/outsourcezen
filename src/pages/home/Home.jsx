@@ -1,5 +1,3 @@
-import React, { useEffect, useRef } from "react";
-import Lenis from "lenis";
 
 import HeroPage from "./HeroPage";
 import PartnerMarque from "../../components/common/PartnerMarque";

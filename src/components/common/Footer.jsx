@@ -436,7 +436,7 @@ const Footer = () => {
           >
             <span className="absolute inset-0 w-0 bg-yellow-400 transition-all duration-700 ease-out group-hover:w-full" />
             <span className="relative z-10 transition-colors duration-500 group-hover:text-black">
-              Get started
+              Connect with us
             </span>
           </a>
         </div>
