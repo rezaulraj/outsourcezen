@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { MapPin } from "lucide-react";
 
 const Footer = () => {
   const footerRef = useRef(null);
@@ -40,15 +41,6 @@ const Footer = () => {
     let mouseX = 0.5;
     let mouseY = 0.5;
 
-    // Each expression is described by a small set of numeric params so we
-    // can smoothly interpolate ("morph") between any two expressions.
-    // mouthStart/mouthEnd: arc angles (as multiples of PI) for the mouth curve
-    // mouthRadius: how big the mouth arc is
-    // mouthOffsetY: vertical offset of the mouth from face center
-    // mouthWidth: stroke width of the mouth
-    // eyeSleepy: 0 = normal round eye, 1 = fully closed/sleepy arc eye
-    // eyeRadius: eye size
-    // secondaryMouth: optional inner lip line (0 = none, 1 = full)
     const expressionLibrary = {
       bigSmile: {
         mouthStart: 0.1,
@@ -183,7 +175,6 @@ const Footer = () => {
       ctx.lineCap = "round";
 
       if (sleepyAmount > 0.05) {
-        // Blend between a full round eye and a sleepy closed arc
         const openR = r * (1 - sleepyAmount * 0.55);
 
         ctx.beginPath();
@@ -239,7 +230,6 @@ const Footer = () => {
       const to = expressionLibrary[face.toName];
       const params = lerpExpression(from, to, face.morph);
 
-      // Left eye gets a partial wink blend if either side is winking
       const winkBlend =
         (face.fromName === "wink" ? 1 - face.morph : 0) +
         (face.toName === "wink" ? face.morph : 0);
@@ -249,8 +239,6 @@ const Footer = () => {
       ctx.scale(face.s, face.s);
       ctx.rotate(Math.sin(time * 0.7 + index) * 0.08);
 
-      // Eyes — right eye always reflects normal sleepy amount,
-      // left eye gets extra wink closure blended in.
       drawEye(-15, -12, params.eyeRadius, lookX, lookY, params.eyeSleepy);
       drawEye(
         15,
@@ -333,7 +321,7 @@ const Footer = () => {
       });
     };
 
-    const MORPH_DURATION = 0.7; // seconds-ish, scaled by our time increment
+    const MORPH_DURATION = 0.7;
 
     const updateFaceExpression = (face) => {
       if (face.morph < 1) {
@@ -388,12 +376,31 @@ const Footer = () => {
     };
   }, []);
 
+  const offices = [
+    {
+      country: "Scotland · UK",
+      address:
+        "Hillington Business Centre, 15–17 Nasmyth Rd S, Hillington, Glasgow G52 4RE",
+    },
+    {
+      country: "Dhaka · Bangladesh",
+      address: "Sector 10, Dhaka 1230, Bangladesh",
+    },
+    {
+      country: "Romania",
+      address: "201 Barbu Văcărescu, 020276 Bucharest, Romania",
+    },
+    {
+      country: "Portugal",
+      address: "Avenida da República 8, 3º Esq., 1050-195 Lisbon, Portugal",
+    },
+  ];
+
   return (
     <footer
       ref={footerRef}
       className="font-arimo relative overflow-hidden -mt-28 pb-10"
     >
-      {/* proper large curve top */}
       <div
         className="absolute inset-0 bg-[#FFF9E6]"
         style={{
@@ -461,6 +468,14 @@ const Footer = () => {
                 </a>
               ))}
             </div>
+            <div className="mt-4">
+              <a
+                href="@mailto:talk@outreachzen.com"
+                className="hover:underline"
+              >
+                talk@outreachzen.com
+              </a>
+            </div>
           </div>
 
           <div>
@@ -482,14 +497,14 @@ const Footer = () => {
               </form>
             </div>
 
-            <div className="grid gap-8 sm:grid-cols-4">
+            <div className="grid gap-8 sm:grid-cols-3">
               <FooterColumn
                 title="Solutions"
                 links={[
                   "Workforce Sourcing",
                   "Overseas Recruitment",
                   "Bulk Hiring",
-                  "Trade Testing",
+                  "Candidate Screening",
                 ]}
               />
 
@@ -503,18 +518,52 @@ const Footer = () => {
                 links={["Resources", "FAQs", "Case Studies", "News"]}
               />
 
-              <div>
-                <h4 className="text-sm font-bold text-black">Headquarters</h4>
+              {/* <div>
+                <h4 className="text-sm font-bold text-black">Address</h4>
                 <p className="mt-4 text-sm leading-6 text-black/75">
-                  401 Workforce Avenue <br />
-                  Dhaka, Bangladesh
+                  <span className="font-bold">Scotland | UK</span> <br />{" "}
+                  Hillington Business Centre, 15, 17 Nasmyth Rd S, Hillington,
+                  Glasgow G52 4RE
                 </p>
-              </div>
+                <p className="mt-4 text-sm leading-6 text-black/75">
+                  <span className="font-bold">Dhaka | Bangladesh</span> <br />{" "}
+                  Sector 10, Dhaka 1230, Bangladesh
+                </p>
+                <p className="mt-4 text-sm leading-6 text-black/75">
+                  <span className="font-bold">Romania</span> <br /> 201 Barbu
+                  Văcărescu, 020276 Bucharest, Romania.
+                </p>
+                <p className="mt-4 text-sm leading-6 text-black/75">
+                  <span className="font-bold">Portugal</span> <br />
+                  Avenida da República 8, 3º Esq., 1050-195 Lisbon, Portugal.
+                </p>
+              </div> */}
             </div>
           </div>
         </div>
+        <div className="mt-4 border-t border-black/10 pt-8">
+          <h4 className="mb-6 text-xs font-bold uppercase tracking-[0.18em]  text-black/80">
+            Our Offices
+          </h4>
 
-        <div className="footer-reveal mt-14 flex flex-col items-center justify-between gap-6 border-t border-black/10 pt-8 text-xs text-black/70 sm:flex-row">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {offices.map(({ country, address }) => (
+              <div
+                key={country}
+                className="rounded-[20px] border border-black/10 bg-white/60 p-5"
+              >
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FFE994]">
+                    <MapPin size={13} strokeWidth={2.5} />
+                  </span>
+                  <p className="text-sm font-bold text-black">{country}</p>
+                </div>
+                <p className="text-xs leading-5 text-black/60">{address}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="footer-reveal mt-8 flex flex-col items-center justify-between gap-6 border-t border-black/10 pt-8 text-xs text-black/70 sm:flex-row">
           <p>© 2026 OutsourceZen. All rights reserved.</p>
 
           <div className="flex gap-4">
