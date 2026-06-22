@@ -14,6 +14,7 @@ import RelocationOnboarding from "./pages/relocationonboarding/RelocationOnboard
 import Construction from "./pages/industry/construction/Construction";
 import Manufacturing from "./pages/industry/manufacturing/Manufacturing";
 import Hospitality from "./pages/industry/hospitality/Hospitality";
+import Healthcare from "./pages/industry/healthcare/Healthcare";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
               element={<Manufacturing />}
             />
             <Route path="/industries/hospitality" element={<Hospitality />} />
+            <Route path="/industries/healthcare" element={<Healthcare />} />
           </Route>
         </Routes>
       </BrowserRouter>

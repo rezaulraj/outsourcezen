@@ -7,6 +7,9 @@ import HospitalityChallenges from "./HospitalityChallenges";
 import PathAnimation from "../../home/PathAnimation";
 import HospitalityRecruitmentProcess from "./HospitalityRecruitmentProcess";
 import HospitalityWhyChooseUs from "./HospitalityWhyChooseUs";
+import HospitalityWorkforceStatistics from "./HospitalityWorkforceStatistics";
+import SourceFrom from "../../workforce-sourceing/SourceFrom";
+import HospitalitySuccessStories from "./HospitalitySuccessStories";
 
 const Hospitality = () => {
   return (
@@ -18,8 +21,12 @@ const Hospitality = () => {
       <PathAnimation />
       <HospitalityChallenges />
       <HospitalityRecruitmentProcess />
-      <BothPathAnimation/>
-      <HospitalityWhyChooseUs/>
+      <BothPathAnimation />
+      <SourceFrom />
+      <HospitalityWhyChooseUs />
+      <PathAnimation />
+      <HospitalityWorkforceStatistics />
+      <HospitalitySuccessStories />
     </div>
   );
 };
