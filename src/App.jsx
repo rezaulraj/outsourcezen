@@ -13,6 +13,7 @@ import PreDepartureTraining from "./pages/predeparturetraining/PreDepartureTrain
 import RelocationOnboarding from "./pages/relocationonboarding/RelocationOnboarding";
 import Construction from "./pages/industry/construction/Construction";
 import Manufacturing from "./pages/industry/manufacturing/Manufacturing";
+import Hospitality from "./pages/industry/hospitality/Hospitality";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
               path="/industries/manufacturing"
               element={<Manufacturing />}
             />
+            <Route path="/industries/hospitality" element={<Hospitality />} />
           </Route>
         </Routes>
       </BrowserRouter>

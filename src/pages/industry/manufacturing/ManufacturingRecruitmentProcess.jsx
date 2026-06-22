@@ -427,6 +427,7 @@ const ManufacturingRecruitmentProcess = () => {
       ref={sectionRef}
       className="font-arimo bg-[var(--color-primary-bg)] py-24 lg:py-32"
     >
+     
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mfg-process-reveal mx-auto mb-14 max-w-3xl text-center">
           <p className="mb-3 inline-block border-b border-black text-sm font-medium text-black">
