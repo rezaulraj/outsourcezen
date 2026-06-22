@@ -470,10 +470,10 @@ const Footer = () => {
             </div>
             <div className="mt-4">
               <a
-                href="@mailto:talk@outreachzen.com"
+                href="@mailto:talk@outsourcezen.com"
                 className="hover:underline"
               >
-                talk@outreachzen.com
+                talk@outsourcezen.com
               </a>
             </div>
           </div>
