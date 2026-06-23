@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 
 const Footer = () => {
   const footerRef = useRef(null);
@@ -468,7 +468,8 @@ const Footer = () => {
                 </a>
               ))}
             </div>
-            <div className="mt-4">
+            <div className="mt-4 flex items-center gap-2">
+              <Mail />
               <a
                 href="@mailto:talk@outsourcezen.com"
                 className="hover:underline"
@@ -517,27 +518,6 @@ const Footer = () => {
                 title="Resources"
                 links={["Resources", "FAQs", "Case Studies", "News"]}
               />
-
-              {/* <div>
-                <h4 className="text-sm font-bold text-black">Address</h4>
-                <p className="mt-4 text-sm leading-6 text-black/75">
-                  <span className="font-bold">Scotland | UK</span> <br />{" "}
-                  Hillington Business Centre, 15, 17 Nasmyth Rd S, Hillington,
-                  Glasgow G52 4RE
-                </p>
-                <p className="mt-4 text-sm leading-6 text-black/75">
-                  <span className="font-bold">Dhaka | Bangladesh</span> <br />{" "}
-                  Sector 10, Dhaka 1230, Bangladesh
-                </p>
-                <p className="mt-4 text-sm leading-6 text-black/75">
-                  <span className="font-bold">Romania</span> <br /> 201 Barbu
-                  Văcărescu, 020276 Bucharest, Romania.
-                </p>
-                <p className="mt-4 text-sm leading-6 text-black/75">
-                  <span className="font-bold">Portugal</span> <br />
-                  Avenida da República 8, 3º Esq., 1050-195 Lisbon, Portugal.
-                </p>
-              </div> */}
             </div>
           </div>
         </div>

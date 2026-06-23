@@ -16,6 +16,7 @@ import Manufacturing from "./pages/industry/manufacturing/Manufacturing";
 import Hospitality from "./pages/industry/hospitality/Hospitality";
 import Healthcare from "./pages/industry/healthcare/Healthcare";
 import AgricultureFarming from "./pages/industry/agriculturefarming/AgricultureFarming";
+import Contact from "./pages/contact/Contact";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="" element={<Layout />}>
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
+            <Route path="/contact" element={<Contact />} />
             <Route
               path="/solutions/workforce-sourcing"
               element={<WorkforceSourceing />}

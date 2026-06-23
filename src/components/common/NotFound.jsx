@@ -29,33 +29,31 @@ const NotFound = () => {
     return () => ctx.revert();
   }, []);
 
-
   return (
     <main
       ref={pageRef}
       className="font-arimo relative min-h-screen overflow-hidden py-20"
     >
-      <div
-        className="absolute left-0 top-0 h-full w-full bg-[var(--color-primary-bg)]"
-      />
+      <div className="absolute left-0 top-0 h-full w-full bg-[var(--color-primary-bg)]" />
 
       <section className="relative z-20 flex min-h-screen items-center justify-center px-4 text-center">
         <div className="max-w-4xl">
-          <h1 className="text-[120px] font-bold leading-none tracking-[-0.08em] text-black sm:text-[180px] lg:text-[230px]">
-            {["4", "0", "4"].map((word, index) => (
-              <span key={index} className="inline-block overflow-hidden px-2">
+          <h1 className="text-6xl font-bold tracking-[-0.06em] text-black sm:text-8xl lg:text-[140px]">
+            {["Coming", "Soon"].map((word, index) => (
+              <span key={index} className="inline-block overflow-hidden px-3">
                 <span className="notfound-word inline-block">{word}</span>
               </span>
             ))}
           </h1>
 
-          <h2 className="notfound-reveal mt-4 text-4xl font-normal tracking-[-0.04em] text-black sm:text-5xl">
-            Page not found
+          <h2 className="notfound-reveal mt-6 text-3xl font-normal tracking-[-0.04em] text-black sm:text-5xl">
+            We're building something great
           </h2>
 
-          <p className="notfound-reveal mx-auto mt-5 max-w-xl text-lg leading-8 text-black/70">
-            The page you’re looking for may have moved, been removed, or never
-            existed. Let’s get you back to the right place.
+          <p className="notfound-reveal mx-auto mt-6 max-w-2xl text-lg leading-8 text-black/70">
+            This section is currently under development and will be available
+            soon. We're working hard to bring you valuable information,
+            resources and services. Please check back later.
           </p>
 
           <div className="notfound-reveal mt-8 flex flex-wrap justify-center gap-4">
