@@ -17,6 +17,7 @@ import Hospitality from "./pages/industry/hospitality/Hospitality";
 import Healthcare from "./pages/industry/healthcare/Healthcare";
 import AgricultureFarming from "./pages/industry/agriculturefarming/AgricultureFarming";
 import Contact from "./pages/contact/Contact";
+import TransportationLogistics from "./pages/industry/transportationlogistics/TransportationLogistics";
 
 function App() {
   return (
@@ -67,6 +68,10 @@ function App() {
             <Route
               path="/industries/agriculture-farming"
               element={<AgricultureFarming />}
+            />
+            <Route
+              path="/industries/transportation-logistics"
+              element={<TransportationLogistics />}
             />
           </Route>
         </Routes>
