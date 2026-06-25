@@ -555,6 +555,7 @@ const TransportationLogisticsRoles = () => {
   return (
     <section
       ref={sectionRef}
+      id="transportation-logistics-role"
       className="font-arimo bg-[var(--color-primary-bg)] py-24 lg:py-32"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

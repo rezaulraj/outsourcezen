@@ -18,6 +18,7 @@ import Healthcare from "./pages/industry/healthcare/Healthcare";
 import AgricultureFarming from "./pages/industry/agriculturefarming/AgricultureFarming";
 import Contact from "./pages/contact/Contact";
 import TransportationLogistics from "./pages/industry/transportationlogistics/TransportationLogistics";
+import CleaningFacility from "./pages/industry/cleaningfacility/CleaningFacility";
 
 function App() {
   return (
@@ -72,6 +73,10 @@ function App() {
             <Route
               path="/industries/transportation-logistics"
               element={<TransportationLogistics />}
+            />
+            <Route
+              path="/industries/cleaning-facility-management"
+              element={<CleaningFacility />}
             />
           </Route>
         </Routes>

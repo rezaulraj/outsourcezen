@@ -546,7 +546,7 @@ const WhatTransportationLogisticsRecruitment = () => {
               </a>
 
               <a
-                href="/industries/transportation-logistics"
+                href="#transportation-logistics-role"
                 className="inline-flex items-center justify-center rounded-full border border-black/15 px-7 py-4 text-sm font-bold text-black"
               >
                 View logistics roles
