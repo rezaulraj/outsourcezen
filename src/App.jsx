@@ -19,6 +19,7 @@ import AgricultureFarming from "./pages/industry/agriculturefarming/AgricultureF
 import Contact from "./pages/contact/Contact";
 import TransportationLogistics from "./pages/industry/transportationlogistics/TransportationLogistics";
 import CleaningFacility from "./pages/industry/cleaningfacility/CleaningFacility";
+import OurAgent from "./pages/ouragent/OurAgent";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/agents" element={<OurAgent />} />
             <Route
               path="/solutions/workforce-sourcing"
               element={<WorkforceSourceing />}
