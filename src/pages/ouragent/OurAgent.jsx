@@ -9,6 +9,9 @@ import Industrys from "../../components/common/Industrys";
 import PathAnimation from "../home/PathAnimation";
 import Process from "./Process";
 import AgentCertifications from "./AgentCertifications";
+import Cliend from "../home/Cliend";
+import AgentSuccessStatistics from "./AgentSuccessStatistics";
+import AgentFAQCTA from "./AgentFAQCTA";
 
 const OurAgent = () => {
   return (
@@ -19,11 +22,14 @@ const OurAgent = () => {
       <BothPathAnimation />
       <LeadershipTeam />
       <RegionalRecruitmentPartners />
-      <PathAnimation />
+      {/* <PathAnimation /> */}
       <Industrys />
       <Process />
       <BothPathAnimation />
       <AgentCertifications />
+      <AgentSuccessStatistics />
+      <Cliend />
+      <AgentFAQCTA />
     </div>
   );
 };

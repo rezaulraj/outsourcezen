@@ -20,6 +20,7 @@ const TEAM = [
     accent: "#C9A84C",
     initials: "SJ",
     badge: "★ Director",
+    greeting: "Hello!",
   },
   {
     id: 2,
@@ -40,6 +41,7 @@ const TEAM = [
     accent: "#D4A853",
     initials: "MA",
     badge: "◆ Operations",
+    greeting: "Hi there!",
   },
   {
     id: 3,
@@ -60,6 +62,7 @@ const TEAM = [
     accent: "#C9A84C",
     initials: "PN",
     badge: "✦ Consultant",
+    greeting: "Hey! 👋",
   },
   {
     id: 4,
@@ -80,6 +83,7 @@ const TEAM = [
     accent: "#BFA04A",
     initials: "LM",
     badge: "▲ Relations",
+    greeting: "Good day!",
   },
   {
     id: 5,
@@ -100,6 +104,7 @@ const TEAM = [
     accent: "#D4AF37",
     initials: "AD",
     badge: "❖ VP Talent",
+    greeting: "Welcome!",
   },
   {
     id: 6,
@@ -120,22 +125,24 @@ const TEAM = [
     accent: "#C9A84C",
     initials: "YT",
     badge: "◉ Research",
+    greeting: "Konnichiwa!",
   },
 ];
 
-// ── colour helpers ────────────────────────────────────────────────────────────
+// ── colour helpers ──────────────────────────────────────────────────────────
 function shiftLuminance(hex, pct) {
   let n = parseInt(hex.replace("#", ""), 16);
-  let r = Math.min(255, Math.max(0, (n >> 16) + pct));
-  let g = Math.min(255, Math.max(0, ((n >> 8) & 0xff) + pct));
-  let b = Math.min(255, Math.max(0, (n & 0xff) + pct));
+  const r = Math.min(255, Math.max(0, (n >> 16) + pct));
+  const g = Math.min(255, Math.max(0, ((n >> 8) & 0xff) + pct));
+  const b = Math.min(255, Math.max(0, (n & 0xff) + pct));
   return `rgb(${r},${g},${b})`;
 }
 const lighten = (h, p) => shiftLuminance(h, p);
 const darken = (h, p) => shiftLuminance(h, -p);
 
-// ── Canvas portrait ───────────────────────────────────────────────────────────
-function drawPortrait(canvas, person) {
+// ── animated portrait frame ────────────────────────────────────────────────
+// Called on every RAF tick with the current `time` value.
+function drawPortraitFrame(canvas, person, time) {
   const ctx = canvas.getContext("2d");
   const W = canvas.width,
     H = canvas.height;
@@ -155,7 +162,7 @@ function drawPortrait(canvas, person) {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  // subtle grid
+  // grid
   ctx.strokeStyle = "rgba(201,168,76,0.07)";
   ctx.lineWidth = 1;
   for (let x = 0; x < W; x += 18) {
@@ -171,13 +178,15 @@ function drawPortrait(canvas, person) {
     ctx.stroke();
   }
 
-  const cx = W / 2,
-    shoulderY = H * 0.82,
-    neckY = H * 0.56,
-    headY = H * 0.36,
-    headR = W * 0.22;
+  const cx = W / 2;
+  const shoulderY = H * 0.82;
+  const neckY = H * 0.56;
+  // subtle head bob (breathing)
+  const headBob = Math.sin(time * 1.3) * 1.8;
+  const headY = H * 0.36 + headBob;
+  const headR = W * 0.22;
 
-  // suit body
+  // ── BODY (suit) ─────────────────────────────────────────────────────────
   ctx.save();
   ctx.beginPath();
   ctx.moveTo(cx - W * 0.38, H);
@@ -189,7 +198,7 @@ function drawPortrait(canvas, person) {
   ctx.fillStyle = person.suit;
   ctx.fill();
 
-  // lapels
+  // lapel highlights
   [[-1], [1]].forEach(([s]) => {
     ctx.beginPath();
     ctx.moveTo(cx, neckY + 20);
@@ -203,7 +212,7 @@ function drawPortrait(canvas, person) {
     ctx.fill();
   });
 
-  // pocket square
+  // tie pin / accent
   ctx.save();
   ctx.translate(cx - W * 0.12, neckY + 68);
   ctx.fillStyle = person.accent;
@@ -218,7 +227,96 @@ function drawPortrait(canvas, person) {
   ctx.restore();
   ctx.restore();
 
-  // neck
+  // ── WAVING ARM (RIGHT) ──────────────────────────────────────────────────
+  // Arm is drawn AFTER body but BEFORE head so shoulder merges naturally
+  // and the raised forearm/hand appear in the upper-right of the canvas.
+  const waveSpeed = 4.5;
+  const waveSwing = Math.sin(time * waveSpeed) * 0.38; // wrist oscillates
+
+  // shoulder anchor (right side of suit)
+  const armShX = cx + W * 0.24;
+  const armShY = shoulderY - H * 0.14;
+
+  // elbow — arm raised, bent inward
+  const elbowX = cx + W * 0.36;
+  const elbowY = H * 0.44 + Math.sin(time * 1.3) * 2; // slight bob with body
+
+  // wrist — waves left-right at top of canvas
+  const wristX = cx + W * 0.28 + waveSwing * W * 0.14;
+  const wristY = H * 0.18 + Math.abs(Math.sin(time * waveSpeed)) * H * 0.02;
+
+  // upper arm
+  ctx.save();
+  ctx.strokeStyle = person.suit;
+  ctx.lineWidth = W * 0.085;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(armShX, armShY);
+  ctx.lineTo(elbowX, elbowY);
+  ctx.stroke();
+
+  // forearm (slightly lighter sleeve cuff visible)
+  ctx.lineWidth = W * 0.075;
+  ctx.beginPath();
+  ctx.moveTo(elbowX, elbowY);
+  ctx.lineTo(wristX, wristY);
+  ctx.stroke();
+
+  // shirt-cuff peek
+  ctx.strokeStyle = "rgba(255,255,255,0.55)";
+  ctx.lineWidth = W * 0.03;
+  ctx.beginPath();
+  ctx.arc(wristX, wristY, W * 0.06, -0.9, 0.5);
+  ctx.stroke();
+
+  // hand (palm circle)
+  ctx.beginPath();
+  ctx.arc(wristX, wristY, W * 0.055, 0, Math.PI * 2);
+  const hg = ctx.createRadialGradient(
+    wristX - 2,
+    wristY - 2,
+    1,
+    wristX,
+    wristY,
+    W * 0.055,
+  );
+  hg.addColorStop(0, lighten(person.skin, 20));
+  hg.addColorStop(1, person.skin);
+  ctx.fillStyle = hg;
+  ctx.fill();
+  ctx.strokeStyle = darken(person.skin, 18);
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+
+  // 4 fingers fanning open (wave position changes angle slightly)
+  const fingerBase = -Math.PI / 2 + waveSwing * 0.3; // fingers point mostly upward
+  for (let f = 0; f < 4; f++) {
+    const fa = fingerBase + (f - 1.5) * 0.22;
+    const fLen = W * (f === 1 || f === 2 ? 0.095 : 0.078);
+    ctx.beginPath();
+    ctx.moveTo(wristX, wristY);
+    ctx.lineTo(wristX + Math.cos(fa) * fLen, wristY + Math.sin(fa) * fLen);
+    ctx.strokeStyle = darken(person.skin, 8);
+    ctx.lineWidth = W * 0.028;
+    ctx.lineCap = "round";
+    ctx.stroke();
+  }
+  // thumb (points sideways)
+  const thumbA = fingerBase + Math.PI * 0.42 + waveSwing * 0.2;
+  ctx.beginPath();
+  ctx.moveTo(wristX + W * 0.03, wristY + W * 0.01);
+  ctx.lineTo(
+    wristX + W * 0.03 + Math.cos(thumbA) * W * 0.065,
+    wristY + W * 0.01 + Math.sin(thumbA) * W * 0.065,
+  );
+  ctx.strokeStyle = darken(person.skin, 8);
+  ctx.lineWidth = W * 0.03;
+  ctx.stroke();
+
+  ctx.restore();
+
+  // ── NECK ────────────────────────────────────────────────────────────────
   ctx.save();
   ctx.beginPath();
   ctx.ellipse(cx, neckY + 2, W * 0.065, H * 0.065, 0, 0, Math.PI * 2);
@@ -226,9 +324,9 @@ function drawPortrait(canvas, person) {
   ctx.fill();
   ctx.restore();
 
-  // head
+  // ── HEAD ────────────────────────────────────────────────────────────────
   ctx.save();
-  const hg = ctx.createRadialGradient(
+  const hgr = ctx.createRadialGradient(
     cx - headR * 0.2,
     headY - headR * 0.15,
     headR * 0.1,
@@ -236,12 +334,12 @@ function drawPortrait(canvas, person) {
     headY,
     headR,
   );
-  hg.addColorStop(0, lighten(person.skin, 30));
-  hg.addColorStop(0.6, person.skin);
-  hg.addColorStop(1, darken(person.skin, 25));
+  hgr.addColorStop(0, lighten(person.skin, 30));
+  hgr.addColorStop(0.6, person.skin);
+  hgr.addColorStop(1, darken(person.skin, 25));
   ctx.beginPath();
   ctx.ellipse(cx, headY, headR, headR * 1.15, 0, 0, Math.PI * 2);
-  ctx.fillStyle = hg;
+  ctx.fillStyle = hgr;
   ctx.fill();
   ctx.restore();
 
@@ -283,40 +381,104 @@ function drawPortrait(canvas, person) {
   ctx.fill();
   ctx.restore();
 
-  // eyes
-  const eyeY = headY - headR * 0.05,
-    eyeOff = headR * 0.34;
+  // eyes — with realistic blink
+  const eyeY = headY - headR * 0.05;
+  const eyeOff = headR * 0.34;
+  // blink: eyes close briefly every ~4 seconds
+  const blinkT = (time % 4.2) / 4.2;
+  const blinkH =
+    blinkT > 0.9 ? Math.max(0, 1 - Math.abs(blinkT - 0.93) * 40) : 1;
+  // slight look toward the waving hand (right)
+  const lookX = 0.25 + Math.sin(time * 1.3) * 0.05;
+  const lookY = 0.1;
+
   [-eyeOff, eyeOff].forEach((dx) => {
     ctx.save();
     ctx.beginPath();
-    ctx.ellipse(cx + dx, eyeY, headR * 0.14, headR * 0.09, 0, 0, Math.PI * 2);
-    ctx.fillStyle = "#F8F5F0";
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(cx + dx, eyeY, headR * 0.07, 0, Math.PI * 2);
-    ctx.fillStyle = darken(person.hair, 10);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(cx + dx, eyeY, headR * 0.035, 0, Math.PI * 2);
-    ctx.fillStyle = "#0A0A0A";
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(
-      cx + dx - headR * 0.02,
-      eyeY - headR * 0.02,
-      headR * 0.015,
+    ctx.ellipse(
+      cx + dx,
+      eyeY,
+      headR * 0.14,
+      headR * 0.09 * blinkH,
+      0,
       0,
       Math.PI * 2,
     );
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.fillStyle = "#F8F5F0";
     ctx.fill();
+    if (blinkH > 0.1) {
+      ctx.beginPath();
+      ctx.arc(
+        cx + dx + lookX * headR * 0.06,
+        eyeY + lookY * headR * 0.06,
+        headR * 0.07,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fillStyle = darken(person.hair, 10);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(
+        cx + dx + lookX * headR * 0.06,
+        eyeY + lookY * headR * 0.06,
+        headR * 0.035,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fillStyle = "#0A0A0A";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(
+        cx + dx + lookX * headR * 0.06 - headR * 0.02,
+        eyeY + lookY * headR * 0.06 - headR * 0.02,
+        headR * 0.015,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.fill();
+    }
+    // upper eyelid crease
     ctx.beginPath();
-    ctx.moveTo(cx + dx - headR * 0.14, eyeY - headR * 0.15);
+    ctx.moveTo(cx + dx - headR * 0.14, eyeY - headR * 0.15 * blinkH);
     ctx.quadraticCurveTo(
       cx + dx,
-      eyeY - headR * 0.19,
+      eyeY - headR * 0.19 * blinkH,
       cx + dx + headR * 0.14,
-      eyeY - headR * 0.15,
+      eyeY - headR * 0.15 * blinkH,
+    );
+    ctx.strokeStyle = person.hair;
+    ctx.lineWidth = Math.max(1.5, headR * 0.055);
+    ctx.lineCap = "round";
+    ctx.stroke();
+    // lower lid
+    if (blinkH < 0.5) {
+      ctx.beginPath();
+      ctx.moveTo(cx + dx - headR * 0.14, eyeY + headR * 0.09);
+      ctx.quadraticCurveTo(
+        cx + dx,
+        eyeY + headR * 0.12,
+        cx + dx + headR * 0.14,
+        eyeY + headR * 0.09,
+      );
+      ctx.strokeStyle = person.skin;
+      ctx.lineWidth = headR * 0.04;
+      ctx.stroke();
+    }
+    ctx.restore();
+  });
+
+  // eyebrows (lift slightly when waving — cheerful expression)
+  const browLift = 0.18 + Math.abs(Math.sin(time * waveSpeed * 0.5)) * 0.06;
+  [-eyeOff, eyeOff].forEach((dx, si) => {
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(cx + dx - headR * 0.14, eyeY - headR * browLift);
+    ctx.quadraticCurveTo(
+      cx + dx,
+      eyeY - headR * (browLift + 0.06),
+      cx + dx + headR * 0.14 * (si === 0 ? 1 : -1),
+      eyeY - headR * (browLift - 0.02),
     );
     ctx.strokeStyle = person.hair;
     ctx.lineWidth = Math.max(1.5, headR * 0.055);
@@ -341,13 +503,15 @@ function drawPortrait(canvas, person) {
   ctx.stroke();
   ctx.restore();
 
-  // smile
+  // mouth — opens slightly when "talking" (wave cycle)
+  const talkOpen = Math.abs(Math.sin(time * 4.8)) * 0.12;
   ctx.save();
+  // upper smile curve
   ctx.beginPath();
   ctx.moveTo(cx - headR * 0.18, eyeY + headR * 0.52);
   ctx.quadraticCurveTo(
     cx,
-    eyeY + headR * 0.65,
+    eyeY + headR * (0.65 + talkOpen),
     cx + headR * 0.18,
     eyeY + headR * 0.52,
   );
@@ -355,9 +519,24 @@ function drawPortrait(canvas, person) {
   ctx.lineWidth = headR * 0.05;
   ctx.lineCap = "round";
   ctx.stroke();
+  // teeth (visible when mouth open)
+  if (talkOpen > 0.04) {
+    ctx.beginPath();
+    ctx.ellipse(
+      cx,
+      eyeY + headR * (0.57 + talkOpen * 0.3),
+      headR * 0.13,
+      headR * 0.06 * talkOpen * 8,
+      0,
+      0,
+      Math.PI * 2,
+    );
+    ctx.fillStyle = "#FAFAFA";
+    ctx.fill();
+  }
   ctx.restore();
 
-  // gold arc
+  // gold arc halo
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, headY, headR + 6, Math.PI * 1.15, Math.PI * 1.85);
@@ -385,16 +564,79 @@ function drawPortrait(canvas, person) {
   ctx.textBaseline = "middle";
   ctx.fillText(person.initials, cx + headR * 0.75, headY + headR * 0.76);
   ctx.restore();
+
+  // ── SPEECH BUBBLE (hello / greeting) ────────────────────────────────────
+  // cycles: visible for ~2.5s, hidden for ~1s
+  const bubbleCycle = (time * 0.28) % 1;
+  const bubbleAlpha =
+    bubbleCycle < 0.72
+      ? Math.min(
+          1,
+          bubbleCycle < 0.08
+            ? bubbleCycle / 0.08
+            : bubbleCycle > 0.65
+              ? (0.72 - bubbleCycle) / 0.07
+              : 1,
+        )
+      : 0;
+
+  if (bubbleAlpha > 0.01) {
+    const bx = wristX + W * 0.06;
+    const by = wristY - H * 0.09;
+    const text = person.greeting;
+
+    ctx.save();
+    ctx.globalAlpha = bubbleAlpha;
+    ctx.font = `700 ${Math.round(W * 0.075)}px Arimo, sans-serif`;
+    const tw = ctx.measureText(text).width + 20;
+    const bh = H * 0.1;
+
+    // shadow
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = "rgba(0,0,0,0.14)";
+    ctx.shadowOffsetY = 3;
+
+    rr(ctx, bx - tw / 2, by - bh / 2, tw, bh, 10);
+    ctx.fillStyle = "#FFE994";
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = `rgba(201,168,76,0.7)`;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // bubble tail pointing toward hand
+    ctx.beginPath();
+    ctx.moveTo(bx - 8, by + bh / 2);
+    ctx.lineTo(wristX + W * 0.01, wristY - H * 0.02);
+    ctx.lineTo(bx + 2, by + bh / 2);
+    ctx.fillStyle = "#FFE994";
+    ctx.fill();
+    ctx.strokeStyle = `rgba(201,168,76,0.7)`;
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    // text
+    ctx.fillStyle = "#1A2340";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, bx, by);
+
+    ctx.restore();
+  }
 }
 
-// ── Animated SVG background ───────────────────────────────────────────────────
+function rr(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, r);
+}
+
+// ── Animated background (unchanged) ───────────────────────────────────────
 function AnimatedBg() {
   return (
     <div
       className="absolute inset-0 overflow-hidden pointer-events-none"
       style={{ zIndex: 0 }}
     >
-      {/* wave 1 */}
       <svg
         className="absolute w-full"
         style={{ top: "-2%", animation: "waveFloat 14s ease-in-out infinite" }}
@@ -406,7 +648,6 @@ function AnimatedBg() {
           d="M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,186.7C672,203,768,181,864,154.7C960,128,1056,96,1152,96C1248,96,1344,128,1392,144L1440,160L1440,0L0,0Z"
         />
       </svg>
-      {/* wave 2 */}
       <svg
         className="absolute w-full"
         style={{
@@ -421,8 +662,6 @@ function AnimatedBg() {
           d="M0,64L60,80C120,96,240,128,360,128C480,128,600,96,720,85.3C840,75,960,85,1080,96C1200,107,1320,117,1380,122.7L1440,128L1440,0L0,0Z"
         />
       </svg>
-
-      {/* clip-path morphing blobs */}
       <div
         className="absolute"
         style={{
@@ -447,8 +686,6 @@ function AnimatedBg() {
           animation: "blobMorph2 25s ease-in-out infinite",
         }}
       />
-
-      {/* floating gold orbs */}
       {[
         { w: 180, h: 180, top: "12%", left: "3%", dur: "16s" },
         { w: 120, h: 120, top: "55%", left: "88%", dur: "22s" },
@@ -470,8 +707,6 @@ function AnimatedBg() {
           }}
         />
       ))}
-
-      {/* hairline grid overlay */}
       <svg
         className="absolute inset-0 w-full h-full opacity-30"
         style={{ mixBlendMode: "multiply" }}
@@ -493,57 +728,56 @@ function AnimatedBg() {
         </defs>
         <rect width="100%" height="100%" fill="url(#ltgrid)" />
       </svg>
-
       <style>{`
-        @keyframes waveFloat {
-          0%,100%{ transform: translateY(0) scaleX(1); }
-          50%    { transform: translateY(-18px) scaleX(1.03); }
-        }
-        @keyframes blobMorph1 {
-          0%,100%{ clip-path: ellipse(55% 50% at 40% 45%); }
-          33%    { clip-path: ellipse(60% 44% at 50% 40%); }
-          66%    { clip-path: ellipse(50% 55% at 35% 55%); }
-        }
-        @keyframes blobMorph2 {
-          0%,100%{ clip-path: ellipse(52% 48% at 60% 55%); }
-          40%    { clip-path: ellipse(58% 52% at 65% 50%); }
-          70%    { clip-path: ellipse(48% 58% at 55% 60%); }
-        }
-        @keyframes orbFloat {
-          0%,100%{ transform: translateY(0) scale(1);     opacity:0.7; }
-          50%    { transform: translateY(-24px) scale(1.08); opacity:1; }
-        }
-        @keyframes cardIn {
-          from{ opacity:0; transform:translateY(40px) scale(0.94); }
-          to  { opacity:1; transform:translateY(0)    scale(1); }
-        }
-        @keyframes shimmer {
-          0%  { background-position: -200% center; }
-          100%{ background-position:  200% center; }
-        }
-        @keyframes skillPop {
-          from{ opacity:0; transform:scale(0.8) translateY(4px); }
-          to  { opacity:1; transform:scale(1)   translateY(0); }
-        }
-        @keyframes glowPulse {
-          0%,100%{ box-shadow: 0 0 0 0 rgba(201,168,76,0); }
-          50%    { box-shadow: 0 0 22px 6px rgba(201,168,76,0.18); }
-        }
+        @keyframes waveFloat{0%,100%{transform:translateY(0) scaleX(1);}50%{transform:translateY(-18px) scaleX(1.03);}}
+        @keyframes blobMorph1{0%,100%{clip-path:ellipse(55% 50% at 40% 45%);}33%{clip-path:ellipse(60% 44% at 50% 40%);}66%{clip-path:ellipse(50% 55% at 35% 55%);}}
+        @keyframes blobMorph2{0%,100%{clip-path:ellipse(52% 48% at 60% 55%);}40%{clip-path:ellipse(58% 52% at 65% 50%);}70%{clip-path:ellipse(48% 58% at 55% 60%);}}
+        @keyframes orbFloat{0%,100%{transform:translateY(0) scale(1);opacity:0.7;}50%{transform:translateY(-24px) scale(1.08);opacity:1;}}
+        @keyframes cardIn{from{opacity:0;transform:translateY(40px) scale(0.94);}to{opacity:1;transform:translateY(0) scale(1);}}
+        @keyframes shimmer{0%{background-position:-200% center;}100%{background-position:200% center;}}
+        @keyframes skillPop{from{opacity:0;transform:scale(0.8) translateY(4px);}to{opacity:1;transform:scale(1) translateY(0);}}
+        @keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0);}50%{box-shadow:0 0 22px 6px rgba(201,168,76,0.18);}}
       `}</style>
     </div>
   );
 }
 
+// ── LeaderCard ─────────────────────────────────────────────────────────────
 function LeaderCard({ person, index }) {
   const canvasRef = useRef(null);
+  const frameRef = useRef(null);
+  const timeRef = useRef(Math.random() * 100); // offset each card's phase
   const [flipped, setFlipped] = useState(false);
   const [hovered, setHovered] = useState(false);
 
+  // ── animation loop ────────────────────────────────────────────────────
   useEffect(() => {
-    if (canvasRef.current) drawPortrait(canvasRef.current, person);
+    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+
+    const tick = () => {
+      timeRef.current += 0.016;
+      drawPortraitFrame(canvas, person, timeRef.current);
+      frameRef.current = requestAnimationFrame(tick);
+    };
+
+    frameRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
   }, [person]);
 
   const delay = `${index * 0.1}s`;
+
+  const cornerFili = [
+    ["tl", "top:10px;left:10px", "M2 38 L2 2 L38 2", "2 2"],
+    [
+      "br",
+      "bottom:10px;right:10px;transform:rotate(180deg)",
+      "M38 2 L38 38 L2 38",
+      "38 38",
+    ],
+  ];
 
   return (
     <div
@@ -561,7 +795,7 @@ function LeaderCard({ person, index }) {
         style={{
           position: "relative",
           width: "100%",
-          height: 420,
+          height: 440,
           transformStyle: "preserve-3d",
           transition:
             "transform 0.75s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s",
@@ -596,7 +830,7 @@ function LeaderCard({ person, index }) {
             padding: "0 0 18px",
           }}
         >
-          {/* shimmer bar top */}
+          {/* shimmer bar */}
           <div
             style={{
               position: "absolute",
@@ -604,22 +838,14 @@ function LeaderCard({ person, index }) {
               left: 0,
               right: 0,
               height: 3,
-              background: `linear-gradient(90deg, transparent, ${person.accent}, transparent)`,
+              background: `linear-gradient(90deg,transparent,${person.accent},transparent)`,
               backgroundSize: "200% 100%",
               animation: "shimmer 3s linear infinite",
             }}
           />
 
           {/* corner SVG filigree */}
-          {[
-            ["tl", "top:10px;left:10px", "M2 38 L2 2 L38 2", "2 2"],
-            [
-              "br",
-              "bottom:10px;right:10px;transform:rotate(180deg)",
-              "M38 2 L38 38 L2 38",
-              "38 38",
-            ],
-          ].map(([k, st, d, cp]) => (
+          {cornerFili.map(([k, st, d, cp]) => (
             <svg
               key={k}
               viewBox="0 0 40 40"
@@ -676,13 +902,13 @@ function LeaderCard({ person, index }) {
             </span>
           </div>
 
-          {/* portrait */}
+          {/* animated portrait */}
           <div
             style={{
               position: "relative",
               marginTop: 30,
               width: 168,
-              height: 184,
+              height: 192,
               flexShrink: 0,
               animation:
                 hovered && !flipped
@@ -694,7 +920,7 @@ function LeaderCard({ person, index }) {
             <canvas
               ref={canvasRef}
               width={200}
-              height={220}
+              height={228}
               style={{
                 width: "100%",
                 height: "100%",
@@ -713,11 +939,11 @@ function LeaderCard({ person, index }) {
             />
           </div>
 
-          {/* name + position + years */}
+          {/* name / position / years */}
           <div
             style={{
               textAlign: "center",
-              padding: "14px 20px 0",
+              padding: "12px 20px 0",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -758,13 +984,7 @@ function LeaderCard({ person, index }) {
                 marginTop: 6,
               }}
             >
-              <span
-                style={{
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: "#1A2340",
-                }}
-              >
+              <span style={{ fontSize: 15, fontWeight: 700, color: "#1A2340" }}>
                 {person.years}
               </span>
               <span
@@ -828,7 +1048,6 @@ function LeaderCard({ person, index }) {
             padding: "26px 22px 20px",
           }}
         >
-          {/* shimmer bar */}
           <div
             style={{
               position: "absolute",
@@ -836,22 +1055,13 @@ function LeaderCard({ person, index }) {
               left: 0,
               right: 0,
               height: 3,
-              background: `linear-gradient(90deg, transparent, ${person.accent}, transparent)`,
+              background: `linear-gradient(90deg,transparent,${person.accent},transparent)`,
               backgroundSize: "200% 100%",
               animation: "shimmer 3s linear infinite",
             }}
           />
 
-          {/* corner filigrees */}
-          {[
-            ["tl", "top:10px;left:10px", "M2 38 L2 2 L38 2", "2 2"],
-            [
-              "br",
-              "bottom:10px;right:10px;transform:rotate(180deg)",
-              "M38 2 L38 38 L2 38",
-              "38 38",
-            ],
-          ].map(([k, st, d, cp]) => (
+          {cornerFili.map(([k, st, d, cp]) => (
             <svg
               key={k}
               viewBox="0 0 40 40"
@@ -883,7 +1093,6 @@ function LeaderCard({ person, index }) {
             </svg>
           ))}
 
-          {/* monogram watermark */}
           <div
             style={{
               position: "absolute",
@@ -901,7 +1110,6 @@ function LeaderCard({ person, index }) {
             {person.initials}
           </div>
 
-          {/* divider + name */}
           <div
             style={{
               width: 38,
@@ -935,7 +1143,6 @@ function LeaderCard({ person, index }) {
             {person.position}
           </p>
 
-          {/* info rows */}
           <ul
             style={{
               listStyle: "none",
@@ -978,7 +1185,6 @@ function LeaderCard({ person, index }) {
             ))}
           </ul>
 
-          {/* skills section */}
           <div style={{ width: "100%" }}>
             <p
               style={{
@@ -1016,7 +1222,6 @@ function LeaderCard({ person, index }) {
             </div>
           </div>
 
-          {/* back flip hint */}
           <div
             style={{
               display: "flex",
@@ -1048,11 +1253,9 @@ function LeaderCard({ person, index }) {
   );
 }
 
+// ── page ───────────────────────────────────────────────────────────────────
 const LeaderShipTeam = () => (
-  <div
-    className="relative min-h-screen overflow-hidden"
-    // style={{ background: "#FFF9E6" }}
-  >
+  <div className="relative min-h-screen overflow-hidden">
     <AnimatedBg />
 
     <div className="relative" style={{ zIndex: 1, padding: "64px 24px 80px" }}>
@@ -1094,7 +1297,7 @@ const LeaderShipTeam = () => (
         <h1
           style={{
             fontSize: "clamp(2.1rem,5vw,3.5rem)",
-            fontWeight: 700,
+            fontWeight: 600,
             color: "#1A2340",
             lineHeight: 1.12,
             letterSpacing: "-0.01em",
@@ -1127,12 +1330,11 @@ const LeaderShipTeam = () => (
             height: 2,
             margin: "26px auto 0",
             background:
-              "linear-gradient(90deg, transparent, #C9A84C, transparent)",
+              "linear-gradient(90deg,transparent,#C9A84C,transparent)",
           }}
         />
       </header>
 
-      {/* card grid */}
       <div
         style={{
           display: "grid",
@@ -1147,7 +1349,6 @@ const LeaderShipTeam = () => (
         ))}
       </div>
 
-      {/* footer hint */}
       <footer style={{ textAlign: "center", marginTop: 60 }}>
         <span
           style={{

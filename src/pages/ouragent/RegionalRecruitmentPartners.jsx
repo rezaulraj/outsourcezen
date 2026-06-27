@@ -77,14 +77,13 @@ const COUNTRIES = [
   },
 ];
 
-// Formatting target nodes for the underlying SVG engine
+
 const MAP_DATA = COUNTRIES.map((c) => ({
   country: c.code,
-  value: 100, // Even fill weight across the target network
+  value: 100,
 }));
 
 const WORLD_DOTS = [
-  // North America
   [12, 18],
   [14, 16],
   [16, 15],
@@ -462,7 +461,7 @@ const RegionalRecruitmentPartners = () => {
       />
 
       {/* Bottom visible curvy road cut */}
-      <svg
+      {/* <svg
         className="pointer-events-none absolute bottom-0 left-0 z-[2] h-[190px] w-full"
         viewBox="0 0 1440 190"
         preserveAspectRatio="none"
@@ -477,7 +476,7 @@ const RegionalRecruitmentPartners = () => {
        Z"
           fill="var(--color-primary-bg)"
         />
-      </svg>
+      </svg> */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-20 max-w-2xl text-center flex flex-col items-center">
           <h2 className="relative text-4xl font-normal tracking-tight text-gray-950 sm:text-5xl lg:text-6xl pb-4">
