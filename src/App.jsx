@@ -5,7 +5,7 @@ import NotFound from "./components/common/NotFound";
 import WorkforceSourceing from "./pages/workforce-sourceing/WorkforceSourceing";
 import Overseas from "./pages/overseas/Overseas";
 import ExecutiveSearch from "./pages/executivesearch/ExecutiveSearch";
-import SmoothScroll from "./components/common/SmoothScroll";
+// import SmoothScroll from "./components/common/SmoothScroll";
 import BulkHiring from "./pages/bulkhiring/BulkHiring";
 import CandidateScreening from "./pages/candidatescreening/CandidateScreening";
 import VisaDocumentation from "./pages/visa-documentation/VisaDocumentation";
@@ -21,6 +21,9 @@ import TransportationLogistics from "./pages/industry/transportationlogistics/Tr
 import CleaningFacility from "./pages/industry/cleaningfacility/CleaningFacility";
 import OurAgent from "./pages/ouragent/OurAgent";
 import About from "./pages/company/aboutus/About";
+import OilGasEnergy from "./pages/industry/oilgasenergy/OilGasEnergy";
+import RetailSupermarkets from "./pages/industry/retailsupermarkets/RetailSupermarkets";
+import FoodProcessing from "./pages/industry/foodprocessing/FoodProcessing";
 
 function App() {
   return (
@@ -81,6 +84,18 @@ function App() {
             <Route
               path="/industries/cleaning-facility-management"
               element={<CleaningFacility />}
+            />
+            <Route
+              path="/industries/oil-gas-energy"
+              element={<OilGasEnergy />}
+            />
+            <Route
+              path="/industries/retail-supermarkets"
+              element={<RetailSupermarkets />}
+            />
+            <Route
+              path="/industries/food-processing"
+              element={<FoodProcessing />}
             />
           </Route>
         </Routes>
