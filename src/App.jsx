@@ -5,7 +5,7 @@ import NotFound from "./components/common/NotFound";
 import WorkforceSourceing from "./pages/workforce-sourceing/WorkforceSourceing";
 import Overseas from "./pages/overseas/Overseas";
 import ExecutiveSearch from "./pages/executivesearch/ExecutiveSearch";
-// import SmoothScroll from "./components/common/SmoothScroll";
+
 import BulkHiring from "./pages/bulkhiring/BulkHiring";
 import CandidateScreening from "./pages/candidatescreening/CandidateScreening";
 import VisaDocumentation from "./pages/visa-documentation/VisaDocumentation";
@@ -28,7 +28,6 @@ import FoodProcessing from "./pages/industry/foodprocessing/FoodProcessing";
 function App() {
   return (
     <>
-      {/* <SmoothScroll /> */}
       <BrowserRouter>
         <Routes>
           <Route path="" element={<Layout />}>

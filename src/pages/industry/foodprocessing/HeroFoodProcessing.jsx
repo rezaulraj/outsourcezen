@@ -231,6 +231,26 @@ const HeroFoodProcessing = () => {
       ctx.restore();
     };
 
+    const drawCheck = (x, y, scale = 1) => {
+      ctx.save();
+
+      ctx.translate(x, y);
+      ctx.scale(scale, scale);
+
+      ctx.beginPath();
+      ctx.moveTo(-10, 0);
+      ctx.lineTo(-3, 8);
+      ctx.lineTo(12, -8);
+
+      ctx.strokeStyle = "#fff";
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.stroke();
+
+      ctx.restore();
+    };
+
     const drawWorker = (
       x,
       y,

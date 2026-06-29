@@ -8,10 +8,12 @@ import PathAnimation from "../home/PathAnimation";
 import WhyContactUs from "./WhyContactUs";
 import RecruitmentSupportAreas from "./RecruitmentSupportAreas";
 import ContactFAQ from "./ContactFAQ";
+import SmoothScroll from "../../components/common/SmoothScroll";
 
 const Contact = () => {
   return (
     <div>
+      <SmoothScroll />
       <HeroContact />
       <ContactInformation />
       <BothPathAnimation />

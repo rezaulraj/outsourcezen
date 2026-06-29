@@ -1,4 +1,3 @@
-// components/common/SmoothScroll.jsx
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Lenis from "lenis";
@@ -8,40 +7,29 @@ const SmoothScroll = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Destroy any existing Lenis instance
-    let lenis = null;
+    const lenis = new Lenis({
+      duration: 1.2,
+      lerp: 0.08,
+      smoothWheel: true,
+      wheelMultiplier: 1,
+    });
 
-    const initLenis = () => {
-      lenis = new Lenis({
-        duration: 1.6,
-        lerp: 0.06,
-        smoothWheel: true,
-      });
-
-      lenis.on("scroll", () => {
-        gsap.ticker.tick();
-      });
-
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-
-      requestAnimationFrame(raf);
+    const update = (time) => {
+      lenis.raf(time * 1000);
     };
 
-    initLenis();
-
-    // Scroll to top on route change
-    window.scrollTo(0, 0);
+    gsap.ticker.add(update);
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      if (lenis) {
-        lenis.destroy();
-        lenis = null;
-      }
+      gsap.ticker.remove(update);
+      lenis.destroy();
     };
-  }, [location.pathname]); // ← Re-initialize on route change
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
 
   return null;
 };
