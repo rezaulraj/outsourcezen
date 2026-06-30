@@ -2,91 +2,97 @@ import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import {
   BadgeCheck,
+  Building2,
+  Camera,
   ClipboardCheck,
-  Factory,
-  PackageCheck,
+  Eye,
+  Fingerprint,
+  Flame,
+  Hotel,
+  LockKeyhole,
+  Radio,
   ShieldCheck,
-  Snowflake,
-  Truck,
+  Siren,
+  Store,
   UsersRound,
-  Wrench,
+  Warehouse,
 } from "lucide-react";
 
 const roleGroups = [
   {
-    title: "Production & Processing",
+    title: "Guarding & Patrol",
     roles: [
-      "Production Operator",
-      "Production Worker",
-      "Line Operator",
-      "Food Processor",
-      "Processing Assistant",
-      "Batching Operator",
+      "Security Guards",
+      "Patrol Officers",
+      "Residential Security Guards",
+      "Construction Site Security",
+      "Warehouse Security",
+      "Fire Watch Officers",
     ],
-    icon: Factory,
+    icon: ShieldCheck,
     color: "#FFE994",
   },
   {
-    title: "Machine & Manufacturing",
+    title: "CCTV & Control Room",
     roles: [
-      "Machine Operator",
-      "Mixer Operator",
-      "Baking Operator",
-      "Filling Machine Operator",
-      "Bottling Operator",
-      "Canning Operator",
+      "CCTV Operators",
+      "Control Room Operators",
+      "Monitoring Officers",
+      "Alarm Response Operators",
+      "Radio Controllers",
+      "Incident Reporting Staff",
     ],
-    icon: Wrench,
+    icon: Camera,
     color: "#CFF7BC",
   },
   {
-    title: "Packaging & Labelling",
+    title: "Access Control",
     roles: [
-      "Packing Operator",
-      "Packaging Technician",
-      "Labelling Operator",
-      "Carton Packer",
-      "Sealing Operator",
-      "Palletizing Staff",
+      "Access Control Officers",
+      "Gate Security Officers",
+      "Reception Security",
+      "Visitor Management Staff",
+      "Badge Scan Officers",
+      "Entry Screening Staff",
     ],
-    icon: PackageCheck,
+    icon: Fingerprint,
     color: "#A6E6EC",
   },
   {
-    title: "Quality & Food Safety",
+    title: "Retail & Loss Prevention",
     roles: [
-      "QA Inspector",
-      "QC Technician",
-      "Food Safety Officer",
-      "HACCP Coordinator",
-      "Hygiene Inspector",
-      "Quality Controller",
+      "Retail Security Officers",
+      "Loss Prevention Officers",
+      "Mall Security Guards",
+      "Store Security Staff",
+      "Asset Protection Officers",
+      "Shop Floor Security",
     ],
-    icon: ShieldCheck,
+    icon: Store,
     color: "#FFF6C8",
   },
   {
-    title: "Warehouse & Cold Storage",
+    title: "Event & Hospitality",
     roles: [
-      "Warehouse Assistant",
-      "Forklift Driver",
-      "Cold Storage Operator",
-      "Inventory Controller",
-      "Goods Receiver",
-      "Dispatch Assistant",
+      "Event Security Staff",
+      "Hotel Security",
+      "Crowd Control Staff",
+      "VIP Protection Staff",
+      "Venue Security",
+      "Parking Security",
     ],
-    icon: Snowflake,
-    color: "#FFE994",
+    icon: Hotel,
+    color: "#FFE1A6",
   },
   {
-    title: "Supervisory & Management",
+    title: "Supervision & Compliance",
     roles: [
-      "Shift Supervisor",
-      "Production Supervisor",
-      "Factory Manager",
-      "Operations Manager",
-      "Line Leader",
-      "Team Leader",
+      "Security Supervisors",
+      "Site Security Leads",
+      "Shift Supervisors",
+      "Security Coordinators",
+      "Safety Marshals",
+      "Compliance Officers",
     ],
     icon: UsersRound,
     color: "#CFF7BC",
@@ -94,9 +100,9 @@ const roleGroups = [
 ];
 
 const stats = [
-  { value: "3500+", label: "Food Processing Workers" },
-  { value: "280+", label: "Factories Supported" },
-  { value: "40+", label: "Food Production Projects" },
+  { value: "3200+", label: "Security Staff" },
+  { value: "180+", label: "Sites Protected" },
+  { value: "25+", label: "Countries Supported" },
   { value: "24/7", label: "Recruitment Support" },
 ];
 
@@ -112,7 +118,7 @@ const RolesWeRecruit = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".food-role-word", {
+      gsap.from(".security-role-word", {
         y: 55,
         opacity: 0,
         rotateX: 60,
@@ -121,7 +127,7 @@ const RolesWeRecruit = () => {
         ease: "power4.out",
       });
 
-      gsap.from(".food-role-reveal", {
+      gsap.from(".security-role-reveal", {
         y: 35,
         opacity: 0,
         duration: 0.85,
@@ -130,7 +136,7 @@ const RolesWeRecruit = () => {
         ease: "power3.out",
       });
 
-      gsap.from(".food-role-card", {
+      gsap.from(".security-role-card", {
         y: 35,
         opacity: 1,
         scale: 0.96,
@@ -140,7 +146,7 @@ const RolesWeRecruit = () => {
         ease: "power3.out",
       });
 
-      gsap.from(".food-role-stat", {
+      gsap.from(".security-role-stat", {
         y: 25,
         opacity: 0,
         scale: 0.96,
@@ -183,7 +189,7 @@ const RolesWeRecruit = () => {
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.setTransform(dpr, 0, 0, 0 + dpr, 0, 0);
     };
 
     const rr = (x, y, width, height, radius) => {
@@ -195,34 +201,31 @@ const RolesWeRecruit = () => {
       ctx.save();
       ctx.translate(x, y);
       ctx.scale(s, s);
-
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 3;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
-
       ctx.beginPath();
       ctx.moveTo(-8, 0);
       ctx.lineTo(-3, 6);
       ctx.lineTo(10, -9);
       ctx.stroke();
-
       ctx.restore();
     };
 
     const drawBackground = () => {
       const bg = ctx.createLinearGradient(0, 0, 0, h);
       bg.addColorStop(0, "#FFF9E6");
-      bg.addColorStop(0.62, "#F6EEDB");
-      bg.addColorStop(1, "#DCCFB0");
+      bg.addColorStop(0.5, "#F1E7D0");
+      bg.addColorStop(1, "#D3C3A6");
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, w, h);
 
-      const floorY = h * 0.78;
-      ctx.fillStyle = "#D7C8A8";
+      const floorY = h * 0.8;
+      ctx.fillStyle = "#B7A98F";
       ctx.fillRect(0, floorY, w, h - floorY);
 
-      ctx.strokeStyle = "rgba(0,0,0,0.13)";
+      ctx.strokeStyle = "rgba(0,0,0,0.14)";
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(0, floorY);
@@ -230,7 +233,7 @@ const RolesWeRecruit = () => {
       ctx.stroke();
 
       ctx.save();
-      ctx.globalAlpha = 0.075;
+      ctx.globalAlpha = 0.07;
       ctx.strokeStyle = "#111";
 
       for (let x = 0; x < w; x += 42) {
@@ -249,7 +252,7 @@ const RolesWeRecruit = () => {
 
       ctx.restore();
 
-      for (let i = 0; i < 34; i++) {
+      for (let i = 0; i < 35; i++) {
         const x = ((i * 89) % w) + Math.sin(time + i) * 8;
         const y = ((i * 47) % h) + Math.cos(time * 1.1 + i) * 7;
 
@@ -260,101 +263,153 @@ const RolesWeRecruit = () => {
       }
     };
 
-    const drawMachine = (x, y, s) => {
+    const drawBuilding = (x, y, s) => {
       ctx.save();
       ctx.translate(x, y);
       ctx.scale(s, s);
 
-      rr(-118, -120, 236, 138, 18);
+      rr(-130, -250, 260, 270, 22);
+      ctx.fillStyle = "#FFF9E6";
+      ctx.fill();
+      ctx.strokeStyle = "#111";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      rr(-52, -62, 104, 82, 14);
+      ctx.fillStyle = "#1C1810";
+      ctx.fill();
+      ctx.strokeStyle = "#111";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          rr(-96 + c * 52, -212 + r * 40, 27, 23, 5);
+          ctx.fillStyle =
+            Math.sin(time * 2 + r + c) > 0.2 ? "#A6E6EC" : "#FFE994";
+          ctx.fill();
+          ctx.strokeStyle = "#111";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+      }
+
+      rr(-116, -274, 232, 34, 12);
+      ctx.fillStyle = "#111";
+      ctx.fill();
+
+      ctx.fillStyle = "#FFF9E6";
+      ctx.font = "900 15px Arimo";
+      ctx.textAlign = "center";
+      ctx.fillText("SECURITY SITE", 0, -252);
+
+      ctx.restore();
+    };
+
+    const drawCctvWall = (x, y, s) => {
+      ctx.save();
+      ctx.translate(x, y + Math.sin(time * 1.2) * 4);
+      ctx.scale(s, s);
+
+      rr(-145, -112, 290, 198, 22);
+      ctx.fillStyle = "#111";
+      ctx.fill();
+      ctx.strokeStyle = "#CFF7BC";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      const labels = ["Gate", "Lobby", "Parking", "Warehouse"];
+
+      for (let i = 0; i < 4; i++) {
+        const xx = -126 + (i % 2) * 132;
+        const yy = -92 + Math.floor(i / 2) * 88;
+
+        rr(xx, yy, 118, 72, 10);
+        ctx.fillStyle = "#1E2B2A";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.18)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(xx + 14, yy + 45 + Math.sin(time * 2 + i) * 8);
+        ctx.lineTo(xx + 42, yy + 30);
+        ctx.lineTo(xx + 72, yy + 46);
+        ctx.lineTo(xx + 103, yy + 25);
+        ctx.strokeStyle = "#67D946";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = "#CFF7BC";
+        ctx.font = "800 9px Arimo";
+        ctx.fillText(labels[i], xx + 18, yy + 16);
+
+        ctx.beginPath();
+        ctx.arc(
+          xx + 100,
+          yy + 14,
+          5 + Math.sin(time * 5 + i) * 1.5,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fillStyle = i === 1 ? "#FFE994" : "#67D946";
+        ctx.fill();
+      }
+
+      ctx.fillStyle = "#CFF7BC";
+      ctx.font = "900 13px Arimo";
+      ctx.textAlign = "center";
+      ctx.fillText("LIVE CCTV MONITORING", 0, 68);
+
+      ctx.restore();
+    };
+
+    const drawAccessGate = (x, y, s) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(s, s);
+
+      rr(-145, -88, 290, 90, 18);
+      ctx.fillStyle = "#111";
+      ctx.fill();
+
+      rr(-130, -72, 260, 58, 14);
+      ctx.fillStyle = "#FFF9E6";
+      ctx.fill();
+
+      const barX = -110 + ((time * 65) % 220);
+      ctx.beginPath();
+      ctx.moveTo(barX, -72);
+      ctx.lineTo(barX, -14);
+      ctx.strokeStyle = "rgba(103,217,70,0.65)";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.fillStyle = "#111";
+      ctx.font = "900 13px Arimo";
+      ctx.textAlign = "center";
+      ctx.fillText("ACCESS CONTROL", 0, -38);
+
+      rr(-166, -120, 42, 122, 10);
       ctx.fillStyle = "#FFF9E6";
       ctx.fill();
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      rr(-92, -92, 72, 56, 10);
-      ctx.fillStyle = "#A6E6EC";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      rr(12, -96, 72, 66, 12);
-      ctx.fillStyle = "#CFF7BC";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      for (let i = 0; i < 3; i++) {
-        ctx.beginPath();
-        ctx.arc(48 + i * 18, -14, 6 + Math.sin(time * 3 + i) * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = i === 0 ? "#67D946" : "#FFE994";
-        ctx.fill();
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      }
-
       ctx.beginPath();
-      ctx.moveTo(-118, -28);
-      ctx.lineTo(118, -28);
+      ctx.arc(-145, -82, 12 + Math.sin(time * 5) * 2, 0, Math.PI * 2);
+      ctx.fillStyle = "#67D946";
+      ctx.fill();
       ctx.strokeStyle = "#111";
-      ctx.lineWidth = 3;
       ctx.stroke();
 
       ctx.restore();
     };
 
-    const drawConveyor = (x, y, s, length = 360) => {
+    const drawGuard = (x, y, s, flip = false, phase = 0) => {
       ctx.save();
-      ctx.translate(x, y);
-      ctx.scale(s, s);
-
-      rr(-length / 2, -20, length, 42, 16);
-      ctx.fillStyle = "#1C1810";
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(-length / 2 + 18, 0);
-      ctx.lineTo(length / 2 - 18, 0);
-      ctx.strokeStyle = "#67D946";
-      ctx.lineWidth = 3;
-      ctx.setLineDash([14, 14]);
-      ctx.lineDashOffset = -time * 58;
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      for (let i = 0; i < 6; i++) {
-        const px = -length / 2 + 45 + ((time * 48 + i * 70) % (length - 90));
-
-        rr(px - 22, -42, 44, 30, 8);
-        ctx.fillStyle = "#CFF7BC";
-        ctx.fill();
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(px + 13, -17, 4, 0, Math.PI * 2);
-        ctx.fillStyle = "#67D946";
-        ctx.fill();
-      }
-
-      ctx.restore();
-    };
-
-    const drawWorker = (
-      x,
-      y,
-      s,
-      apron = "#F4F4F4",
-      action = "inspect",
-      flip = false,
-      phase = 0
-    ) => {
-      ctx.save();
-      ctx.translate(x, y + Math.sin(time * 1.25 + phase) * 2);
+      ctx.translate(x, y + Math.sin(time * 1.3 + phase) * 2);
       if (flip) ctx.scale(-1, 1);
       ctx.scale(s, s);
 
@@ -366,203 +421,98 @@ const RolesWeRecruit = () => {
       ctx.lineJoin = "round";
 
       ctx.beginPath();
-      ctx.moveTo(-8, 0);
-      ctx.lineTo(-13, 28);
-      ctx.moveTo(8, 0);
-      ctx.lineTo(13, 28);
+      ctx.moveTo(-9, 0);
+      ctx.lineTo(-15, 32);
+      ctx.moveTo(9, 0);
+      ctx.lineTo(15, 32);
       ctx.stroke();
 
-      rr(-18, -45, 36, 48, 8);
-      ctx.fillStyle = apron;
+      rr(-21, -50, 42, 54, 9);
+      ctx.fillStyle = "#1C1810";
+      ctx.fill();
+      ctx.stroke();
+
+      rr(-15, -42, 30, 38, 7);
+      ctx.fillStyle = "#FFE994";
       ctx.fill();
       ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 1.2;
       ctx.stroke();
-
-      rr(-15, -40, 30, 42, 7);
-      ctx.fillStyle = "#DDF4FF";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      let rightX = 38;
-      let rightY = -26 + Math.sin(t * 3.5) * 4;
-
-      if (action === "inspect") {
-        rightX = 44;
-        rightY = -42;
-      }
-
-      if (action === "pack") {
-        rightX = 42;
-        rightY = -26;
-      }
-
-      if (action === "clipboard") {
-        rightX = 38;
-        rightY = -32;
-      }
 
       ctx.beginPath();
-      ctx.moveTo(-15, -34);
-      ctx.lineTo(-34, -18 + Math.sin(t * 3) * 3);
-      ctx.moveTo(15, -34);
-      ctx.lineTo(rightX, rightY);
-      ctx.strokeStyle = apron;
+      ctx.moveTo(-18, -38);
+      ctx.lineTo(-39, -18 + Math.sin(t * 3) * 3);
+      ctx.moveTo(18, -38);
+      ctx.lineTo(42, -28 + Math.sin(t * 2.6) * 4);
+      ctx.strokeStyle = "#1C1810";
       ctx.lineWidth = 7;
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(-34, -18 + Math.sin(t * 3) * 3, 5, 0, Math.PI * 2);
-      ctx.arc(rightX, rightY, 5, 0, Math.PI * 2);
+      ctx.arc(-39, -18 + Math.sin(t * 3) * 3, 5, 0, Math.PI * 2);
+      ctx.arc(42, -28 + Math.sin(t * 2.6) * 4, 5, 0, Math.PI * 2);
       ctx.fillStyle = "#E7B58B";
       ctx.fill();
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      if (action === "inspect") {
-        ctx.save();
-        ctx.translate(rightX + 15, rightY - 4);
-        ctx.rotate(-0.15);
-
-        rr(-7, -5, 28, 12, 4);
-        ctx.fillStyle = "#1C1810";
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.moveTo(21, 0);
-        ctx.lineTo(48, 0);
-        ctx.strokeStyle = "rgba(103,217,70,0.65)";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        ctx.restore();
-      }
-
-      if (action === "pack") {
-        rr(rightX + 6, rightY - 14, 28, 24, 5);
-        ctx.fillStyle = "#FFE994";
-        ctx.fill();
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      }
-
-      if (action === "clipboard") {
-        ctx.save();
-        ctx.translate(rightX + 12, rightY);
-        ctx.rotate(-0.18);
-
-        rr(-10, -16, 20, 26, 4);
-        ctx.fillStyle = "#fff";
-        ctx.fill();
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(-4, -6);
-        ctx.lineTo(5, -6);
-        ctx.moveTo(-4, 1);
-        ctx.lineTo(6, 1);
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.restore();
-      }
+      ctx.save();
+      ctx.translate(52, -30 + Math.sin(t * 2.6) * 4);
+      ctx.rotate(-0.12);
+      rr(-8, -12, 22, 28, 5);
+      ctx.fillStyle = "#A6E6EC";
+      ctx.fill();
+      ctx.strokeStyle = "#111";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
 
       ctx.beginPath();
-      ctx.moveTo(0, -45);
-      ctx.lineTo(0, -52);
+      ctx.arc(3, 2, 5 + Math.sin(time * 5) * 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = "#67D946";
+      ctx.fill();
+      ctx.strokeStyle = "#111";
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.moveTo(0, -50);
+      ctx.lineTo(0, -58);
       ctx.strokeStyle = "#E7B58B";
       ctx.lineWidth = 6;
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(0, -66, 14, 0, Math.PI * 2);
+      ctx.arc(0, -72, 15, 0, Math.PI * 2);
       ctx.fillStyle = "#E7B58B";
       ctx.fill();
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.beginPath();
-      ctx.moveTo(-16, -73);
-      ctx.quadraticCurveTo(0, -96, 16, -73);
-      ctx.lineTo(16, -62);
-      ctx.quadraticCurveTo(0, -70, -16, -62);
-      ctx.closePath();
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      rr(-12, -60, 24, 8, 4);
-      ctx.fillStyle = "#A6E6EC";
+      rr(-19, -90, 38, 13, 5);
+      ctx.fillStyle = "#1C1810";
       ctx.fill();
       ctx.strokeStyle = "#111";
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(-5, -65, 2, 0, Math.PI * 2);
-      ctx.arc(5, -65, 2, 0, Math.PI * 2);
+      ctx.moveTo(-18, -80);
+      ctx.quadraticCurveTo(0, -102, 18, -80);
+      ctx.fillStyle = "#1C1810";
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(-5, -71, 2, 0, Math.PI * 2);
+      ctx.arc(5, -71, 2, 0, Math.PI * 2);
       ctx.fillStyle = "#111";
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(0, -58, 4, 0.1, Math.PI - 0.1);
+      ctx.arc(0, -64, 4, 0.1, Math.PI - 0.1);
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      ctx.restore();
-    };
-
-    const drawForklift = (x, y, s) => {
-      ctx.save();
-      ctx.translate(x, y + Math.sin(time * 1.2) * 2);
-      ctx.scale(s, s);
-
-      rr(-52, -36, 90, 42, 10);
-      ctx.fillStyle = "#FFE994";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      rr(-28, -72, 42, 36, 8);
-      ctx.fillStyle = "#CFF7BC";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(42, -72);
-      ctx.lineTo(42, 16);
-      ctx.moveTo(42, 12);
-      ctx.lineTo(88, 12);
-      ctx.moveTo(42, -2);
-      ctx.lineTo(82, -2);
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 4;
-      ctx.stroke();
-
-      [-32, 22].forEach((wx) => {
-        ctx.beginPath();
-        ctx.arc(wx, 15, 10, 0, Math.PI * 2);
-        ctx.fillStyle = "#111";
-        ctx.fill();
-      });
-
-      rr(78, -26, 42, 38, 5);
-      ctx.fillStyle = "#A6E6EC";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2;
       ctx.stroke();
 
       ctx.restore();
@@ -574,7 +524,7 @@ const RolesWeRecruit = () => {
       ctx.save();
       ctx.translate(w * 0.5, h * 0.13 + Math.sin(time * 1.2) * 5);
 
-      rr(-152, -56, 304, 112, 30);
+      rr(-155, -56, 310, 112, 30);
       ctx.fillStyle = "#FFF9E6";
       ctx.fill();
       ctx.strokeStyle = "#111";
@@ -582,7 +532,7 @@ const RolesWeRecruit = () => {
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(-110, 0, 24, 0, Math.PI * 2);
+      ctx.arc(-112, 0, 24, 0, Math.PI * 2);
       ctx.fillStyle = item.color;
       ctx.fill();
       ctx.stroke();
@@ -590,13 +540,13 @@ const RolesWeRecruit = () => {
       ctx.fillStyle = "#111";
       ctx.font = "800 13px Arimo";
       ctx.textAlign = "center";
-      ctx.fillText("ACTIVE ROLE GROUP", 30, -14);
+      ctx.fillText("ACTIVE SECURITY ROLE", 32, -14);
 
       ctx.font = "900 17px Arimo";
-      ctx.fillText(item.title.toUpperCase(), 30, 16);
+      ctx.fillText(item.title.toUpperCase(), 32, 16);
 
       ctx.beginPath();
-      ctx.arc(132, -40, 7 + Math.sin(time * 5) * 2, 0, Math.PI * 2);
+      ctx.arc(135, -40, 7 + Math.sin(time * 5) * 2, 0, Math.PI * 2);
       ctx.fillStyle = "#67D946";
       ctx.fill();
 
@@ -629,7 +579,7 @@ const RolesWeRecruit = () => {
           y,
           22 + (isActive ? Math.sin(time * 5) * 4 : 0),
           0,
-          Math.PI * 2
+          Math.PI * 2,
         );
         ctx.fillStyle = isActive ? item.color : "#FFF9E6";
         ctx.fill();
@@ -658,7 +608,7 @@ const RolesWeRecruit = () => {
       ctx.save();
       ctx.translate(x, y + Math.sin(time * 1.45 + phase) * 6);
 
-      rr(-90, -32, 180, 64, 20);
+      rr(-92, -32, 184, 64, 20);
       ctx.fillStyle = "#FFF9E6";
       ctx.fill();
       ctx.strokeStyle = "#111";
@@ -666,7 +616,7 @@ const RolesWeRecruit = () => {
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(-58, 0, 17, 0, Math.PI * 2);
+      ctx.arc(-60, 0, 17, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
       ctx.stroke();
@@ -692,27 +642,23 @@ const RolesWeRecruit = () => {
 
       const s = Math.min(w, h) / 820;
 
-      drawMachine(w * 0.22, h * 0.66, s * 0.82);
-      drawMachine(w * 0.8, h * 0.65, s * 0.68);
-      drawConveyor(w * 0.5, h * 0.76, s * 1.02, 390);
+      drawBuilding(w * 0.52, h * 0.72, s * 0.78);
+      drawAccessGate(w * 0.52, h * 0.82, s * 0.88);
 
-      drawWorker(w * 0.37, h * 0.86, s * 0.78, "#F4F4F4", "inspect", false, 0);
-      drawWorker(
-        w * 0.6,
-        h * 0.86,
-        s * 0.76,
-        "#F4F4F4",
-        "clipboard",
-        true,
-        1.2
+      drawCctvWall(w * 0.23, h * 0.53, s * 0.66);
+      drawGuard(w * 0.36, h * 0.88, s * 0.72, false, 0);
+      drawGuard(w * 0.72, h * 0.88, s * 0.68, true, 1.2);
+
+      drawFloatingCard(w * 0.22, h * 0.23, "Guarding", "Patrol", "#FFE994", 0);
+      drawFloatingCard(w * 0.78, h * 0.23, "Monitoring", "CCTV", "#CFF7BC", 2);
+      drawFloatingCard(
+        w * 0.5,
+        h * 0.96,
+        "Deployment",
+        "Staff ready ✓",
+        "#A6E6EC",
+        4,
       );
-      drawWorker(w * 0.72, h * 0.86, s * 0.72, "#F4F4F4", "pack", false, 2.2);
-
-      drawForklift(w * 0.1 + ((time * 35) % (w * 0.72)), h * 0.91, s * 0.76);
-
-      drawFloatingCard(w * 0.22, h * 0.25, "Production", "Line workers", "#FFE994", 0);
-      drawFloatingCard(w * 0.78, h * 0.25, "Quality", "Food safety", "#CFF7BC", 2);
-      drawFloatingCard(w * 0.5, h * 0.94, "Deployment", "Factory team ready ✓", "#A6E6EC", 4);
 
       frame = requestAnimationFrame(draw);
     };
@@ -734,25 +680,27 @@ const RolesWeRecruit = () => {
       className="font-arimo bg-[var(--color-primary-bg)] py-24 lg:py-32"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="food-role-reveal mx-auto mb-14 max-w-3xl text-center">
+        <div className="security-role-reveal mx-auto mb-14 max-w-3xl text-center">
           <p className="mb-3 inline-block border-b border-black text-sm font-medium text-black">
             Roles We Recruit
           </p>
 
           <h2 className="text-4xl font-normal tracking-[-0.045em] text-black sm:text-5xl lg:text-6xl">
-            {["Food", "factory", "talent", "for", "every", "production", "stage"].map(
+            {["Security", "professionals", "for", "every", "site", "need"].map(
               (word) => (
                 <span key={word} className="inline-block overflow-hidden px-1">
-                  <span className="food-role-word inline-block">{word}</span>
+                  <span className="security-role-word inline-block">
+                    {word}
+                  </span>
                 </span>
-              )
+              ),
             )}
           </h2>
 
           <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-black/70">
-            We recruit production workers, machine operators, packaging teams,
-            warehouse staff, quality inspectors, food safety professionals and
-            factory leaders.
+            We recruit trained guards, CCTV operators, access control officers,
+            retail security, event staff, supervisors and compliance-ready
+            security teams.
           </p>
         </div>
 
@@ -768,9 +716,9 @@ const RolesWeRecruit = () => {
                   onMouseEnter={() => setActive(index)}
                   onFocus={() => setActive(index)}
                   onClick={() => setActive(index)}
-                  className={`food-role-card w-full rounded-[30px] border p-6 text-left transition-all duration-300 ${
+                  className={`security-role-card w-full rounded-[30px] border p-6 text-left transition-all duration-300 ${
                     isActive
-                      ? "border-black bg-[#FFF9E6]"
+                      ? "border-black bg-[#FFF9E6] shadow-xl"
                       : "border-black/10 bg-[#FFF9E6]/75 hover:border-black/30"
                   }`}
                 >
@@ -804,16 +752,16 @@ const RolesWeRecruit = () => {
             })}
           </div>
 
-          <div className="food-role-reveal relative h-[500px] overflow-hidden rounded-[40px] border border-black/10 bg-[#FFF9E6] shadow-xl sm:h-[600px] lg:sticky lg:top-24 lg:h-[690px]">
+          <div className="security-role-reveal relative h-[500px] overflow-hidden rounded-[40px] border border-black/10 bg-[#FFF9E6] shadow-xl sm:h-[600px] lg:sticky lg:top-24 lg:h-[690px]">
             <canvas ref={canvasRef} className="h-full w-full" />
           </div>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {/* <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((item) => (
             <article
               key={item.label}
-              className="food-role-stat rounded-[28px] border border-black/10 bg-[#FFF9E6] p-6 text-center"
+              className="security-role-stat rounded-[28px] border border-black/10 bg-[#FFF9E6] p-6 text-center"
             >
               <p className="text-4xl font-normal tracking-[-0.06em] text-black">
                 {item.value}
@@ -824,24 +772,24 @@ const RolesWeRecruit = () => {
               </p>
             </article>
           ))}
-        </div>
+        </div> */}
 
-        <div className="food-role-reveal mt-10 rounded-[34px] border border-black/10 bg-[#FFF9E6] p-6 sm:p-8">
+        <div className="security-role-reveal mt-10 rounded-[34px] border border-black/10 bg-[#FFF9E6] p-6 sm:p-8">
           <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
             <div className="flex gap-5">
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#CFF7BC]">
-                <Factory size={28} strokeWidth={2.4} />
+                <LockKeyhole size={28} strokeWidth={2.4} />
               </div>
 
               <div>
                 <h3 className="text-2xl font-bold tracking-[-0.04em] text-black">
-                  Need workers for a specific food production role?
+                  Need security staff for a specific site?
                 </h3>
 
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-black/70">
-                  We support hiring across production, packaging, machine
-                  operation, warehouse, cold storage, QA/QC, food safety and
-                  factory supervision.
+                  We support hiring for guarding, patrol, CCTV monitoring,
+                  access control, events, hotels, retail, warehouses,
+                  construction sites and security supervision.
                 </p>
               </div>
             </div>
@@ -850,10 +798,30 @@ const RolesWeRecruit = () => {
               href="/contact"
               className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-bold text-white"
             >
-              Request Food Staff
+              Request Security Staff
               <BadgeCheck size={16} />
             </a>
           </div>
+        </div>
+
+        <div className="security-role-reveal mt-6 flex flex-wrap items-center justify-center gap-3">
+          {[
+            "Security Guards",
+            "CCTV Operators",
+            "Access Control",
+            "Event Security",
+            "Retail Security",
+            "Supervisors",
+            "Fire Watch",
+          ].map((item) => (
+            <span
+              key={item}
+              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-[#FFF9E6] px-4 py-2 text-sm font-bold text-black/65"
+            >
+              <ClipboardCheck size={14} />
+              {item}
+            </span>
+          ))}
         </div>
       </div>
     </section>

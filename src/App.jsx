@@ -24,6 +24,8 @@ import About from "./pages/company/aboutus/About";
 import OilGasEnergy from "./pages/industry/oilgasenergy/OilGasEnergy";
 import RetailSupermarkets from "./pages/industry/retailsupermarkets/RetailSupermarkets";
 import FoodProcessing from "./pages/industry/foodprocessing/FoodProcessing";
+import ShipbuildingMarine from "./pages/industry/shipbuildingmarine/ShipbuildingMarine";
+import SecurityServices from "./pages/industry/securityservices/SecurityServices";
 
 function App() {
   return (
@@ -95,6 +97,14 @@ function App() {
             <Route
               path="/industries/food-processing"
               element={<FoodProcessing />}
+            />
+            <Route
+              path="/industries/shipbuilding-marine"
+              element={<ShipbuildingMarine />}
+            />
+            <Route
+              path="/industries/security-services"
+              element={<SecurityServices />}
             />
           </Route>
         </Routes>

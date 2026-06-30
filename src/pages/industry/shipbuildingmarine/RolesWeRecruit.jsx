@@ -3,90 +3,92 @@ import gsap from "gsap";
 import {
   BadgeCheck,
   ClipboardCheck,
-  Factory,
-  PackageCheck,
+  Cog,
+  HardHat,
+  Paintbrush,
+  Radio,
   ShieldCheck,
-  Snowflake,
-  Truck,
+  Ship,
   UsersRound,
   Wrench,
+  Zap,
 } from "lucide-react";
 
 const roleGroups = [
   {
-    title: "Production & Processing",
+    title: "Shipyard Trades",
     roles: [
-      "Production Operator",
-      "Production Worker",
-      "Line Operator",
-      "Food Processor",
-      "Processing Assistant",
-      "Batching Operator",
+      "Welders",
+      "Pipe Fitters",
+      "Ship Fitters",
+      "Steel Fabricators",
+      "Hull Technicians",
+      "CNC Operators",
     ],
-    icon: Factory,
+    icon: Wrench,
     color: "#FFE994",
   },
   {
-    title: "Machine & Manufacturing",
+    title: "Marine Technical",
     roles: [
-      "Machine Operator",
-      "Mixer Operator",
-      "Baking Operator",
-      "Filling Machine Operator",
-      "Bottling Operator",
-      "Canning Operator",
+      "Marine Electricians",
+      "Marine Mechanics",
+      "Marine Engineers",
+      "Naval Architects",
+      "Engine Room Technicians",
+      "Automation Technicians",
     ],
-    icon: Wrench,
+    icon: Cog,
     color: "#CFF7BC",
   },
   {
-    title: "Packaging & Labelling",
+    title: "Deck & Offshore Crew",
     roles: [
-      "Packing Operator",
-      "Packaging Technician",
-      "Labelling Operator",
-      "Carton Packer",
-      "Sealing Operator",
-      "Palletizing Staff",
+      "Deck Crew",
+      "Engine Room Crew",
+      "Riggers",
+      "Scaffolders",
+      "Crane Assistants",
+      "Offshore Support Crew",
     ],
-    icon: PackageCheck,
+    icon: Ship,
     color: "#A6E6EC",
   },
   {
-    title: "Quality & Food Safety",
+    title: "Surface Treatment",
     roles: [
-      "QA Inspector",
-      "QC Technician",
-      "Food Safety Officer",
-      "HACCP Coordinator",
-      "Hygiene Inspector",
-      "Quality Controller",
+      "Painters",
+      "Blasters",
+      "Coating Inspectors",
+      "Spray Painters",
+      "Sandblasting Crew",
+      "Surface Prep Workers",
     ],
-    icon: ShieldCheck,
+    icon: Paintbrush,
     color: "#FFF6C8",
   },
   {
-    title: "Warehouse & Cold Storage",
+    title: "Safety & Quality",
     roles: [
-      "Warehouse Assistant",
-      "Forklift Driver",
-      "Cold Storage Operator",
-      "Inventory Controller",
-      "Goods Receiver",
-      "Dispatch Assistant",
+      "QA/QC Inspectors",
+      "HSE Officers",
+      "Welding Inspectors",
+      "Safety Supervisors",
+      "NDT Technicians",
+      "Compliance Coordinators",
     ],
-    icon: Snowflake,
+    icon: ShieldCheck,
     color: "#FFE994",
   },
   {
-    title: "Supervisory & Management",
+    title: "Project Leadership",
     roles: [
-      "Shift Supervisor",
-      "Production Supervisor",
-      "Factory Manager",
-      "Operations Manager",
-      "Line Leader",
-      "Team Leader",
+      "Project Supervisors",
+      "Foremen",
+      "Site Coordinators",
+      "Marine Project Managers",
+      "Production Planners",
+      "Team Leaders",
     ],
     icon: UsersRound,
     color: "#CFF7BC",
@@ -94,9 +96,9 @@ const roleGroups = [
 ];
 
 const stats = [
-  { value: "3500+", label: "Food Processing Workers" },
-  { value: "280+", label: "Factories Supported" },
-  { value: "40+", label: "Food Production Projects" },
+  { value: "2200+", label: "Marine Workers" },
+  { value: "120+", label: "Shipyard Projects" },
+  { value: "30+", label: "Countries Supported" },
   { value: "24/7", label: "Recruitment Support" },
 ];
 
@@ -112,7 +114,7 @@ const RolesWeRecruit = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".food-role-word", {
+      gsap.from(".marine-role-word", {
         y: 55,
         opacity: 0,
         rotateX: 60,
@@ -121,7 +123,7 @@ const RolesWeRecruit = () => {
         ease: "power4.out",
       });
 
-      gsap.from(".food-role-reveal", {
+      gsap.from(".marine-role-reveal", {
         y: 35,
         opacity: 0,
         duration: 0.85,
@@ -130,7 +132,7 @@ const RolesWeRecruit = () => {
         ease: "power3.out",
       });
 
-      gsap.from(".food-role-card", {
+      gsap.from(".marine-role-card", {
         y: 35,
         opacity: 1,
         scale: 0.96,
@@ -140,7 +142,7 @@ const RolesWeRecruit = () => {
         ease: "power3.out",
       });
 
-      gsap.from(".food-role-stat", {
+      gsap.from(".marine-role-stat", {
         y: 25,
         opacity: 0,
         scale: 0.96,
@@ -195,42 +197,29 @@ const RolesWeRecruit = () => {
       ctx.save();
       ctx.translate(x, y);
       ctx.scale(s, s);
-
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 3;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
-
       ctx.beginPath();
       ctx.moveTo(-8, 0);
       ctx.lineTo(-3, 6);
       ctx.lineTo(10, -9);
       ctx.stroke();
-
       ctx.restore();
     };
 
     const drawBackground = () => {
-      const bg = ctx.createLinearGradient(0, 0, 0, h);
-      bg.addColorStop(0, "#FFF9E6");
-      bg.addColorStop(0.62, "#F6EEDB");
-      bg.addColorStop(1, "#DCCFB0");
-      ctx.fillStyle = bg;
+      const sky = ctx.createLinearGradient(0, 0, 0, h);
+      sky.addColorStop(0, "#FFF9E6");
+      sky.addColorStop(0.5, "#F2E5C8");
+      sky.addColorStop(0.76, "#D8C4A1");
+      sky.addColorStop(1, "#A9B7BA");
+      ctx.fillStyle = sky;
       ctx.fillRect(0, 0, w, h);
 
-      const floorY = h * 0.78;
-      ctx.fillStyle = "#D7C8A8";
-      ctx.fillRect(0, floorY, w, h - floorY);
-
-      ctx.strokeStyle = "rgba(0,0,0,0.13)";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(0, floorY);
-      ctx.lineTo(w, floorY);
-      ctx.stroke();
-
       ctx.save();
-      ctx.globalAlpha = 0.075;
+      ctx.globalAlpha = 0.07;
       ctx.strokeStyle = "#111";
 
       for (let x = 0; x < w; x += 42) {
@@ -249,96 +238,183 @@ const RolesWeRecruit = () => {
 
       ctx.restore();
 
-      for (let i = 0; i < 34; i++) {
-        const x = ((i * 89) % w) + Math.sin(time + i) * 8;
-        const y = ((i * 47) % h) + Math.cos(time * 1.1 + i) * 7;
-
+      for (let i = 0; i < 30; i++) {
+        const x = ((i * 91) % w) + Math.sin(time + i) * 9;
+        const y = ((i * 41) % (h * 0.58)) + Math.cos(time * 1.1 + i) * 7;
         ctx.beginPath();
-        ctx.arc(x, y, 1.2 + Math.sin(time * 2 + i) * 0.6, 0, Math.PI * 2);
+        ctx.arc(x, y, 1.2 + Math.sin(time * 2 + i) * 0.55, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(231,181,58,0.25)";
         ctx.fill();
       }
     };
 
-    const drawMachine = (x, y, s) => {
+    const drawWater = () => {
+      const y = h * 0.78;
+      ctx.fillStyle = "#8EA5AA";
+      ctx.fillRect(0, y, w, h - y);
+
+      for (let i = 0; i < 8; i++) {
+        ctx.beginPath();
+        const yy = y + 14 + i * 24;
+
+        for (let x = -40; x <= w + 40; x += 26) {
+          const waveY = yy + Math.sin(x * 0.02 + time * 2 + i) * 4;
+          if (x === -40) ctx.moveTo(x, waveY);
+          else ctx.lineTo(x, waveY);
+        }
+
+        ctx.strokeStyle = "rgba(255,255,255,0.3)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    };
+
+    const drawDock = () => {
+      const y = h * 0.78;
+
+      ctx.fillStyle = "#2D2720";
+      ctx.fillRect(0, y - 22, w, 28);
+
+      for (let i = 0; i < 10; i++) {
+        const x = i * (w / 9);
+
+        ctx.beginPath();
+        ctx.moveTo(x, y - 22);
+        ctx.lineTo(x - 40, h);
+        ctx.strokeStyle = "rgba(0,0,0,0.35)";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+      }
+    };
+
+    const drawShip = (x, y, s) => {
       ctx.save();
       ctx.translate(x, y);
       ctx.scale(s, s);
 
-      rr(-118, -120, 236, 138, 18);
+      ctx.beginPath();
+      ctx.moveTo(-220, -36);
+      ctx.lineTo(210, -36);
+      ctx.quadraticCurveTo(170, 62, -145, 58);
+      ctx.quadraticCurveTo(-220, 35, -220, -36);
+      ctx.closePath();
+
+      const hull = ctx.createLinearGradient(0, -40, 0, 70);
+      hull.addColorStop(0, "#1A242E");
+      hull.addColorStop(0.58, "#243849");
+      hull.addColorStop(0.59, "#8B3E2F");
+      hull.addColorStop(1, "#5B2B25");
+
+      ctx.fillStyle = hull;
+      ctx.fill();
+      ctx.strokeStyle = "#111";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      for (let i = 0; i < 9; i++) {
+        ctx.beginPath();
+        ctx.arc(-150 + i * 38, -13, 5, 0, Math.PI * 2);
+        ctx.fillStyle = "#FFE994";
+        ctx.fill();
+        ctx.strokeStyle = "#111";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      rr(-85, -106, 165, 66, 10);
       ctx.fillStyle = "#FFF9E6";
       ctx.fill();
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      rr(-92, -92, 72, 56, 10);
-      ctx.fillStyle = "#A6E6EC";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      rr(12, -96, 72, 66, 12);
-      ctx.fillStyle = "#CFF7BC";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-
-      for (let i = 0; i < 3; i++) {
-        ctx.beginPath();
-        ctx.arc(48 + i * 18, -14, 6 + Math.sin(time * 3 + i) * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = i === 0 ? "#67D946" : "#FFE994";
+      for (let i = 0; i < 6; i++) {
+        rr(-66 + i * 25, -88, 12, 12, 3);
+        ctx.fillStyle = "#A6E6EC";
         ctx.fill();
         ctx.strokeStyle = "#111";
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1;
         ctx.stroke();
       }
 
+      ctx.restore();
+    };
+
+    const drawCrane = (x, y, s, flip = false) => {
+      ctx.save();
+      ctx.translate(x, y);
+      if (flip) ctx.scale(-1, 1);
+      ctx.scale(s, s);
+
+      ctx.strokeStyle = "#111";
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
       ctx.beginPath();
-      ctx.moveTo(-118, -28);
-      ctx.lineTo(118, -28);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, -250);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0, -225);
+      ctx.lineTo(200, -288);
+      ctx.moveTo(0, -225);
+      ctx.lineTo(165, -214);
+      ctx.moveTo(40, -238);
+      ctx.lineTo(55, -221);
+      ctx.moveTo(80, -250);
+      ctx.lineTo(98, -228);
+      ctx.moveTo(120, -263);
+      ctx.lineTo(138, -220);
+      ctx.stroke();
+
+      const hookX = 165 + Math.sin(time * 0.9) * 16;
+
+      ctx.beginPath();
+      ctx.moveTo(hookX, -274);
+      ctx.lineTo(hookX, -142);
       ctx.strokeStyle = "#111";
       ctx.lineWidth = 3;
+      ctx.stroke();
+
+      rr(hookX - 28, -128 + Math.sin(time * 1.4) * 5, 56, 46, 4);
+      ctx.fillStyle = "#A6E6EC";
+      ctx.fill();
+      ctx.strokeStyle = "#111";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      rr(-36, -20, 72, 28, 6);
+      ctx.fillStyle = "#FFE994";
+      ctx.fill();
       ctx.stroke();
 
       ctx.restore();
     };
 
-    const drawConveyor = (x, y, s, length = 360) => {
+    const drawScaffold = (x, y, s) => {
       ctx.save();
       ctx.translate(x, y);
       ctx.scale(s, s);
 
-      rr(-length / 2, -20, length, 42, 16);
-      ctx.fillStyle = "#1C1810";
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(-length / 2 + 18, 0);
-      ctx.lineTo(length / 2 - 18, 0);
-      ctx.strokeStyle = "#67D946";
+      ctx.strokeStyle = "#111";
       ctx.lineWidth = 3;
-      ctx.setLineDash([14, 14]);
-      ctx.lineDashOffset = -time * 58;
-      ctx.stroke();
-      ctx.setLineDash([]);
 
-      for (let i = 0; i < 6; i++) {
-        const px = -length / 2 + 45 + ((time * 48 + i * 70) % (length - 90));
-
-        rr(px - 22, -42, 44, 30, 8);
-        ctx.fillStyle = "#CFF7BC";
-        ctx.fill();
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
+      for (let i = 0; i < 5; i++) {
+        const xx = i * 28;
         ctx.beginPath();
-        ctx.arc(px + 13, -17, 4, 0, Math.PI * 2);
-        ctx.fillStyle = "#67D946";
-        ctx.fill();
+        ctx.moveTo(xx, 0);
+        ctx.lineTo(xx, -145);
+        ctx.stroke();
+      }
+
+      for (let j = 0; j < 6; j++) {
+        const yy = -j * 29;
+        ctx.beginPath();
+        ctx.moveTo(0, yy);
+        ctx.lineTo(112, yy);
+        ctx.stroke();
       }
 
       ctx.restore();
@@ -348,13 +424,13 @@ const RolesWeRecruit = () => {
       x,
       y,
       s,
-      apron = "#F4F4F4",
-      action = "inspect",
+      color = "#FFE994",
+      action = "weld",
       flip = false,
       phase = 0
     ) => {
       ctx.save();
-      ctx.translate(x, y + Math.sin(time * 1.25 + phase) * 2);
+      ctx.translate(x, y + Math.sin(time * 1.3 + phase) * 2);
       if (flip) ctx.scale(-1, 1);
       ctx.scale(s, s);
 
@@ -373,30 +449,16 @@ const RolesWeRecruit = () => {
       ctx.stroke();
 
       rr(-18, -45, 36, 48, 8);
-      ctx.fillStyle = apron;
+      ctx.fillStyle = color;
       ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2;
       ctx.stroke();
 
-      rr(-15, -40, 30, 42, 7);
-      ctx.fillStyle = "#DDF4FF";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      let rightX = 38;
+      let rightX = 40;
       let rightY = -26 + Math.sin(t * 3.5) * 4;
 
-      if (action === "inspect") {
-        rightX = 44;
-        rightY = -42;
-      }
-
-      if (action === "pack") {
-        rightX = 42;
-        rightY = -26;
+      if (action === "weld") {
+        rightX = 45;
+        rightY = -20;
       }
 
       if (action === "clipboard") {
@@ -404,12 +466,17 @@ const RolesWeRecruit = () => {
         rightY = -32;
       }
 
+      if (action === "rig") {
+        rightX = 42;
+        rightY = -52;
+      }
+
       ctx.beginPath();
       ctx.moveTo(-15, -34);
       ctx.lineTo(-34, -18 + Math.sin(t * 3) * 3);
       ctx.moveTo(15, -34);
       ctx.lineTo(rightX, rightY);
-      ctx.strokeStyle = apron;
+      ctx.strokeStyle = color;
       ctx.lineWidth = 7;
       ctx.stroke();
 
@@ -422,39 +489,36 @@ const RolesWeRecruit = () => {
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      if (action === "inspect") {
+      if (action === "weld") {
         ctx.save();
-        ctx.translate(rightX + 15, rightY - 4);
-        ctx.rotate(-0.15);
-
-        rr(-7, -5, 28, 12, 4);
-        ctx.fillStyle = "#1C1810";
-        ctx.fill();
+        ctx.translate(rightX + 10, rightY);
+        ctx.rotate(-0.2);
 
         ctx.beginPath();
-        ctx.moveTo(21, 0);
-        ctx.lineTo(48, 0);
-        ctx.strokeStyle = "rgba(103,217,70,0.65)";
+        ctx.moveTo(0, 0);
+        ctx.lineTo(28, 8);
+        ctx.strokeStyle = "#111";
         ctx.lineWidth = 3;
         ctx.stroke();
 
-        ctx.restore();
-      }
+        for (let i = 0; i < 8; i++) {
+          const a = (Math.PI * 2 * i) / 8 + time * 5;
+          const r = 8 + Math.sin(time * 8 + i) * 5;
+          ctx.beginPath();
+          ctx.moveTo(30, 8);
+          ctx.lineTo(30 + Math.cos(a) * r, 8 + Math.sin(a) * r);
+          ctx.strokeStyle = "#FFD36B";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
 
-      if (action === "pack") {
-        rr(rightX + 6, rightY - 14, 28, 24, 5);
-        ctx.fillStyle = "#FFE994";
-        ctx.fill();
-        ctx.strokeStyle = "#111";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+        ctx.restore();
       }
 
       if (action === "clipboard") {
         ctx.save();
         ctx.translate(rightX + 12, rightY);
         ctx.rotate(-0.18);
-
         rr(-10, -16, 20, 26, 4);
         ctx.fillStyle = "#fff";
         ctx.fill();
@@ -470,7 +534,6 @@ const RolesWeRecruit = () => {
         ctx.strokeStyle = "#111";
         ctx.lineWidth = 1;
         ctx.stroke();
-
         ctx.restore();
       }
 
@@ -489,22 +552,17 @@ const RolesWeRecruit = () => {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.beginPath();
-      ctx.moveTo(-16, -73);
-      ctx.quadraticCurveTo(0, -96, 16, -73);
-      ctx.lineTo(16, -62);
-      ctx.quadraticCurveTo(0, -70, -16, -62);
-      ctx.closePath();
-      ctx.fillStyle = "#FFFFFF";
+      rr(-17, -82, 34, 12, 5);
+      ctx.fillStyle = "#F4C542";
       ctx.fill();
       ctx.strokeStyle = "#111";
-      ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      rr(-12, -60, 24, 8, 4);
-      ctx.fillStyle = "#A6E6EC";
+      ctx.beginPath();
+      ctx.moveTo(-18, -74);
+      ctx.quadraticCurveTo(0, -95, 18, -74);
+      ctx.fillStyle = "#F4C542";
       ctx.fill();
-      ctx.strokeStyle = "#111";
       ctx.stroke();
 
       ctx.beginPath();
@@ -522,59 +580,13 @@ const RolesWeRecruit = () => {
       ctx.restore();
     };
 
-    const drawForklift = (x, y, s) => {
-      ctx.save();
-      ctx.translate(x, y + Math.sin(time * 1.2) * 2);
-      ctx.scale(s, s);
-
-      rr(-52, -36, 90, 42, 10);
-      ctx.fillStyle = "#FFE994";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      rr(-28, -72, 42, 36, 8);
-      ctx.fillStyle = "#CFF7BC";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(42, -72);
-      ctx.lineTo(42, 16);
-      ctx.moveTo(42, 12);
-      ctx.lineTo(88, 12);
-      ctx.moveTo(42, -2);
-      ctx.lineTo(82, -2);
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 4;
-      ctx.stroke();
-
-      [-32, 22].forEach((wx) => {
-        ctx.beginPath();
-        ctx.arc(wx, 15, 10, 0, Math.PI * 2);
-        ctx.fillStyle = "#111";
-        ctx.fill();
-      });
-
-      rr(78, -26, 42, 38, 5);
-      ctx.fillStyle = "#A6E6EC";
-      ctx.fill();
-      ctx.strokeStyle = "#111";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.restore();
-    };
-
     const drawRoleBadge = () => {
       const item = roleGroups[activeRef.current];
 
       ctx.save();
       ctx.translate(w * 0.5, h * 0.13 + Math.sin(time * 1.2) * 5);
 
-      rr(-152, -56, 304, 112, 30);
+      rr(-155, -56, 310, 112, 30);
       ctx.fillStyle = "#FFF9E6";
       ctx.fill();
       ctx.strokeStyle = "#111";
@@ -582,7 +594,7 @@ const RolesWeRecruit = () => {
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(-110, 0, 24, 0, Math.PI * 2);
+      ctx.arc(-112, 0, 24, 0, Math.PI * 2);
       ctx.fillStyle = item.color;
       ctx.fill();
       ctx.stroke();
@@ -590,13 +602,13 @@ const RolesWeRecruit = () => {
       ctx.fillStyle = "#111";
       ctx.font = "800 13px Arimo";
       ctx.textAlign = "center";
-      ctx.fillText("ACTIVE ROLE GROUP", 30, -14);
+      ctx.fillText("ACTIVE MARINE ROLE", 32, -14);
 
       ctx.font = "900 17px Arimo";
-      ctx.fillText(item.title.toUpperCase(), 30, 16);
+      ctx.fillText(item.title.toUpperCase(), 32, 16);
 
       ctx.beginPath();
-      ctx.arc(132, -40, 7 + Math.sin(time * 5) * 2, 0, Math.PI * 2);
+      ctx.arc(135, -40, 7 + Math.sin(time * 5) * 2, 0, Math.PI * 2);
       ctx.fillStyle = "#67D946";
       ctx.fill();
 
@@ -658,7 +670,7 @@ const RolesWeRecruit = () => {
       ctx.save();
       ctx.translate(x, y + Math.sin(time * 1.45 + phase) * 6);
 
-      rr(-90, -32, 180, 64, 20);
+      rr(-92, -32, 184, 64, 20);
       ctx.fillStyle = "#FFF9E6";
       ctx.fill();
       ctx.strokeStyle = "#111";
@@ -666,7 +678,7 @@ const RolesWeRecruit = () => {
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(-58, 0, 17, 0, Math.PI * 2);
+      ctx.arc(-60, 0, 17, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
       ctx.stroke();
@@ -682,37 +694,56 @@ const RolesWeRecruit = () => {
       ctx.restore();
     };
 
+    const drawContainers = (x, y, s) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(s, s);
+
+      const colors = ["#A6E6EC", "#CFF7BC", "#FFE994"];
+
+      for (let i = 0; i < 5; i++) {
+        const xx = (i % 3) * 62;
+        const yy = -Math.floor(i / 3) * 34;
+
+        rr(xx, yy, 58, 30, 4);
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+        ctx.strokeStyle = "#111";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    };
+
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       time += 0.014;
 
       drawBackground();
+      drawWater();
+      drawDock();
       drawRoleBadge();
       drawRoleOrbit();
 
       const s = Math.min(w, h) / 820;
 
-      drawMachine(w * 0.22, h * 0.66, s * 0.82);
-      drawMachine(w * 0.8, h * 0.65, s * 0.68);
-      drawConveyor(w * 0.5, h * 0.76, s * 1.02, 390);
+      drawCrane(w * 0.14, h * 0.78, s * 0.82, false);
+      drawCrane(w * 0.88, h * 0.78, s * 0.74, true);
 
-      drawWorker(w * 0.37, h * 0.86, s * 0.78, "#F4F4F4", "inspect", false, 0);
-      drawWorker(
-        w * 0.6,
-        h * 0.86,
-        s * 0.76,
-        "#F4F4F4",
-        "clipboard",
-        true,
-        1.2
-      );
-      drawWorker(w * 0.72, h * 0.86, s * 0.72, "#F4F4F4", "pack", false, 2.2);
+      drawShip(w * 0.52, h * 0.69, s * 0.9);
+      drawScaffold(w * 0.59, h * 0.64, s * 0.7);
 
-      drawForklift(w * 0.1 + ((time * 35) % (w * 0.72)), h * 0.91, s * 0.76);
+      drawContainers(w * 0.08, h * 0.75, s * 0.66);
+      drawContainers(w * 0.73, h * 0.77, s * 0.62);
 
-      drawFloatingCard(w * 0.22, h * 0.25, "Production", "Line workers", "#FFE994", 0);
-      drawFloatingCard(w * 0.78, h * 0.25, "Quality", "Food safety", "#CFF7BC", 2);
-      drawFloatingCard(w * 0.5, h * 0.94, "Deployment", "Factory team ready ✓", "#A6E6EC", 4);
+      drawWorker(w * 0.36, h * 0.86, s * 0.74, "#FFE994", "weld", false, 0);
+      drawWorker(w * 0.62, h * 0.84, s * 0.69, "#CFF7BC", "rig", true, 1.1);
+      drawWorker(w * 0.76, h * 0.86, s * 0.69, "#A6E6EC", "clipboard", false, 2.2);
+
+      drawFloatingCard(w * 0.22, h * 0.25, "Shipyard Trades", "Welders", "#FFE994", 0);
+      drawFloatingCard(w * 0.78, h * 0.25, "Technical", "Engineers", "#CFF7BC", 2);
+      drawFloatingCard(w * 0.5, h * 0.94, "Deployment", "Crew ready ✓", "#A6E6EC", 4);
 
       frame = requestAnimationFrame(draw);
     };
@@ -734,25 +765,24 @@ const RolesWeRecruit = () => {
       className="font-arimo bg-[var(--color-primary-bg)] py-24 lg:py-32"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="food-role-reveal mx-auto mb-14 max-w-3xl text-center">
+        <div className="marine-role-reveal mx-auto mb-14 max-w-3xl text-center">
           <p className="mb-3 inline-block border-b border-black text-sm font-medium text-black">
             Roles We Recruit
           </p>
 
           <h2 className="text-4xl font-normal tracking-[-0.045em] text-black sm:text-5xl lg:text-6xl">
-            {["Food", "factory", "talent", "for", "every", "production", "stage"].map(
+            {["Marine", "talent", "for", "every", "shipyard", "operation"].map(
               (word) => (
                 <span key={word} className="inline-block overflow-hidden px-1">
-                  <span className="food-role-word inline-block">{word}</span>
+                  <span className="marine-role-word inline-block">{word}</span>
                 </span>
               )
             )}
           </h2>
 
           <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-black/70">
-            We recruit production workers, machine operators, packaging teams,
-            warehouse staff, quality inspectors, food safety professionals and
-            factory leaders.
+            We recruit skilled trades, marine technical workers, offshore crew,
+            surface treatment teams, safety inspectors and project leadership.
           </p>
         </div>
 
@@ -768,9 +798,9 @@ const RolesWeRecruit = () => {
                   onMouseEnter={() => setActive(index)}
                   onFocus={() => setActive(index)}
                   onClick={() => setActive(index)}
-                  className={`food-role-card w-full rounded-[30px] border p-6 text-left transition-all duration-300 ${
+                  className={`marine-role-card w-full rounded-[30px] border p-6 text-left transition-all duration-300 ${
                     isActive
-                      ? "border-black bg-[#FFF9E6]"
+                      ? "border-black bg-[#FFF9E6] shadow-xl"
                       : "border-black/10 bg-[#FFF9E6]/75 hover:border-black/30"
                   }`}
                 >
@@ -804,16 +834,16 @@ const RolesWeRecruit = () => {
             })}
           </div>
 
-          <div className="food-role-reveal relative h-[500px] overflow-hidden rounded-[40px] border border-black/10 bg-[#FFF9E6] shadow-xl sm:h-[600px] lg:sticky lg:top-24 lg:h-[690px]">
+          <div className="marine-role-reveal relative h-[500px] overflow-hidden rounded-[40px] border border-black/10 bg-[#FFF9E6] shadow-xl sm:h-[600px] lg:sticky lg:top-24 lg:h-[690px]">
             <canvas ref={canvasRef} className="h-full w-full" />
           </div>
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {/* <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((item) => (
             <article
               key={item.label}
-              className="food-role-stat rounded-[28px] border border-black/10 bg-[#FFF9E6] p-6 text-center"
+              className="marine-role-stat rounded-[28px] border border-black/10 bg-[#FFF9E6] p-6 text-center"
             >
               <p className="text-4xl font-normal tracking-[-0.06em] text-black">
                 {item.value}
@@ -824,24 +854,24 @@ const RolesWeRecruit = () => {
               </p>
             </article>
           ))}
-        </div>
+        </div> */}
 
-        <div className="food-role-reveal mt-10 rounded-[34px] border border-black/10 bg-[#FFF9E6] p-6 sm:p-8">
+        <div className="marine-role-reveal mt-10 rounded-[34px] border border-black/10 bg-[#FFF9E6] p-6 sm:p-8">
           <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
             <div className="flex gap-5">
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#CFF7BC]">
-                <Factory size={28} strokeWidth={2.4} />
+                <HardHat size={28} strokeWidth={2.4} />
               </div>
 
               <div>
                 <h3 className="text-2xl font-bold tracking-[-0.04em] text-black">
-                  Need workers for a specific food production role?
+                  Need certified marine workers for your project?
                 </h3>
 
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-black/70">
-                  We support hiring across production, packaging, machine
-                  operation, warehouse, cold storage, QA/QC, food safety and
-                  factory supervision.
+                  We support hiring for welding, pipe fitting, marine
+                  electrical, rigging, painting, QA/QC, HSE, engineering and
+                  shipyard project leadership.
                 </p>
               </div>
             </div>
@@ -850,10 +880,30 @@ const RolesWeRecruit = () => {
               href="/contact"
               className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-bold text-white"
             >
-              Request Food Staff
+              Request Marine Staff
               <BadgeCheck size={16} />
             </a>
           </div>
+        </div>
+
+        <div className="marine-role-reveal mt-6 flex flex-wrap items-center justify-center gap-3">
+          {[
+            "Welders",
+            "Pipe Fitters",
+            "Marine Electricians",
+            "Riggers",
+            "QA/QC",
+            "HSE Officers",
+            "Marine Engineers",
+          ].map((item) => (
+            <span
+              key={item}
+              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-[#FFF9E6] px-4 py-2 text-sm font-bold text-black/65"
+            >
+              <ClipboardCheck size={14} />
+              {item}
+            </span>
+          ))}
         </div>
       </div>
     </section>

@@ -186,7 +186,7 @@ const FoodWorkforceStatistics = () => {
           })}
         </div>
 
-        <div className="food-stat-reveal mt-12 rounded-[34px] border border-black/10 bg-[#FFF9E6] p-6 sm:p-8">
+        {/* <div className="food-stat-reveal mt-12 rounded-[34px] border border-black/10 bg-[#FFF9E6] p-6 sm:p-8">
           <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
             <div className="flex gap-5">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#CFF7BC]">
@@ -213,7 +213,7 @@ const FoodWorkforceStatistics = () => {
               <BadgeCheck size={16} />
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
