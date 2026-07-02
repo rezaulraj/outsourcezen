@@ -26,6 +26,7 @@ import RetailSupermarkets from "./pages/industry/retailsupermarkets/RetailSuperm
 import FoodProcessing from "./pages/industry/foodprocessing/FoodProcessing";
 import ShipbuildingMarine from "./pages/industry/shipbuildingmarine/ShipbuildingMarine";
 import SecurityServices from "./pages/industry/securityservices/SecurityServices";
+import SkilledTradesMinimal from "./pages/industry/skilledtradesminimal/SkilledTradesMinimal";
 
 function App() {
   return (
@@ -105,6 +106,10 @@ function App() {
             <Route
               path="/industries/security-services"
               element={<SecurityServices />}
+            />
+            <Route
+              path="/industries/skilled-trades"
+              element={<SkilledTradesMinimal />}
             />
           </Route>
         </Routes>

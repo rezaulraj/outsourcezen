@@ -7,6 +7,9 @@ import RolesWeRecruit from "./RolesWeRecruit";
 import SecurityChallengesWeSolve from "./SecurityChallengesWeSolve";
 import PathAnimation from "../../home/PathAnimation";
 import OurRecruitmentProcess from "./OurRecruitmentProcess";
+import WhyEmployersChooseUs from "./WhyEmployersChooseUs";
+import SecurityWorkforceStatistics from "./SecurityWorkforceStatistics";
+import SuccessStories from "./SuccessStories";
 
 const SecurityServices = () => {
   return (
@@ -17,8 +20,12 @@ const SecurityServices = () => {
       <BothPathAnimation />
       <RolesWeRecruit />
       <SecurityChallengesWeSolve />
-      <PathAnimation/>
-      <OurRecruitmentProcess/>
+      <PathAnimation />
+      <OurRecruitmentProcess />
+      <WhyEmployersChooseUs />
+      <BothPathAnimation />
+      <SecurityWorkforceStatistics />
+      <SuccessStories/>
     </div>
   );
 };
